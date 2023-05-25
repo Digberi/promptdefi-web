@@ -10,6 +10,8 @@ export const ConnectButton = () => {
 
   const shortAddress = address && address.substring(0, 6) + "..." + address.substring(address.length - 4);
 
+  console.log(address)
+
   return (
     <div>
       {isConnected ? (

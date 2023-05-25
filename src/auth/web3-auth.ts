@@ -3,7 +3,7 @@ import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
 import { Web3Auth } from "@web3auth/modal";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { CHAIN_NAMESPACES } from "@web3auth/base";
-import { Chain, Connector } from "wagmi"
+import { Chain } from "wagmi"
 
 export const Web3AuthConnectorInstance = (chains: Chain[]) => {
   // Create Web3Auth Instance
@@ -45,17 +45,10 @@ export const Web3AuthConnectorInstance = (chains: Chain[]) => {
   });
   web3AuthInstance.configureAdapter(openloginAdapterInstance);
 
-  //TODO: Fix types
-  (Web3AuthConnector.prototype as any).setStorage = Connector.prototype.setStorage;
-
-  const web3Connector = new Web3AuthConnector({
+  return new Web3AuthConnector({
     chains: chains,
     options: {
       web3AuthInstance,
     },
-  }) as unknown as Connector;
-
-
-
-  return web3Connector
+  });
 }
