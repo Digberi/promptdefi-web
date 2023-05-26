@@ -1,4 +1,4 @@
-import { FC as TFC, ReactNode } from "react";
+import { FC as TFC, ReactNode } from 'react';
 
 type EmptyObject = object;
 

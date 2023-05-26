@@ -1,5 +1,6 @@
-import { Web3AuthConnector } from "@/auth/wagmi";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+
+import { Web3AuthConnector } from '@/auth/wagmi';
 
 export const ConnectButton = () => {
   const { address, isConnected } = useAccount();
@@ -8,9 +9,9 @@ export const ConnectButton = () => {
   });
   const { disconnect } = useDisconnect();
 
-  const shortAddress = address && address.substring(0, 6) + "..." + address.substring(address.length - 4);
+  const shortAddress = address && address.substring(0, 6) + '...' + address.substring(address.length - 4);
 
-  console.log(address)
+  console.log(address);
 
   return (
     <div>
@@ -20,5 +21,5 @@ export const ConnectButton = () => {
         <button onClick={() => connect()}>Connect</button>
       )}
     </div>
-  )
-}
+  );
+};
