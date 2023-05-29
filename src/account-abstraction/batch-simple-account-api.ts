@@ -107,7 +107,7 @@ export class BatchAccountAPI extends SimpleAccountAPI {
    * @param value
    * @param data
    */
-  async encodeExecuteBatch(target: Array<string>, value: Array<BigNumber>, data: Array<string>): Promise<string> {
+  async encodeExecuteBatch(target: Array<string>, _value: Array<BigNumber>, data: Array<string>): Promise<string> {
     const accountContract = await this._getAccountContract();
 
     return accountContract.interface.encodeFunctionData('executeBatch', [target, data]);
