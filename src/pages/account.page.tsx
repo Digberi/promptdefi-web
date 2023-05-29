@@ -1,7 +1,8 @@
 import { SmartToy, Wallet } from '@mui/icons-material';
-import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 import { useAccount, useNetwork } from 'wagmi';
 
+import { Page } from '@/components/base/page';
 import { ConnectButton } from '@/components/connect-button';
 import { useSmartAccount } from '@/hooks/use-smart-account';
 import { shrink } from '@/utils/shrink';
@@ -14,7 +15,7 @@ export const AccountPage = () => {
   const { chain } = useNetwork();
 
   return (
-    <Box>
+    <Page>
       <Typography variant="h6">Network</Typography>
       <ListItem
         sx={{
@@ -63,6 +64,6 @@ export const AccountPage = () => {
       ) : (
         <ConnectButton />
       )}
-    </Box>
+    </Page>
   );
 };

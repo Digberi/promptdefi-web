@@ -9,7 +9,7 @@ export const ProvidersSandwich: CFC = ({ children }) => {
   return (
     <BrowserRouter>
       <MuiProvider>
-        <WagmiProvider>{children}</WagmiProvider>;
+        <WagmiProvider>{children}</WagmiProvider>
       </MuiProvider>
     </BrowserRouter>
   );
