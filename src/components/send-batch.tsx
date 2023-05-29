@@ -7,7 +7,7 @@ import { erc20ABI, useAccount, useBalance, useProvider, useSigner } from 'wagmi'
 
 import { bundlerClient } from '@/account-abstraction/bandler-client';
 import { ENTRYPOINT_ADDRESS } from '@/config/constants';
-import { useBatchAccountApi } from '@/hooks/use-batch-account-api';
+import { useSmartAccount } from '@/hooks/use-smart-account';
 
 const TokenAddress = '0x2e8d98fd126a32362f2bd8aa427e59a1ec63f780';
 
@@ -15,10 +15,10 @@ export const SendBatch = () => {
   const { address, isConnected } = useAccount();
   const provider = useProvider();
   const { data: signer } = useSigner();
-  const { batchAccountApi, accountAddress } = useBatchAccountApi();
+  const { smartAccountApi, smartAccountAddress } = useSmartAccount();
 
   const { data: tokenInfo } = useBalance({
-    address: accountAddress,
+    address: smartAccountAddress,
     token: TokenAddress
   });
 
@@ -34,17 +34,17 @@ export const SendBatch = () => {
       if (!isConnected) {
         return;
       }
-      if (!batchAccountApi) {
+      if (!smartAccountApi) {
         return;
       }
-      if (!accountAddress) {
+      if (!smartAccountAddress) {
         return;
       }
 
       const entrypoint = EntryPoint__factory.connect(ENTRYPOINT_ADDRESS, signer);
       console.log('create entrypoint');
 
-      const result = await entrypoint.functions.depositTo(accountAddress, {
+      const result = await entrypoint.functions.depositTo(smartAccountAddress, {
         value: utils.parseEther('0.1')
       });
       console.log('send depositTo');
@@ -60,12 +60,12 @@ export const SendBatch = () => {
         '56'
       ]);
 
-      const op = await batchAccountApi.createSignedUserBatchOp({
+      const op = await smartAccountApi.createSignedUserBatchOp({
         target: [TokenAddress, TokenAddress],
         data: [firstData, secondData]
       });
 
-      // const op = await batchAccountApi.createSignedUserOp({
+      // const op = await smartAccountApi.createSignedUserOp({
       //   target: TokenAddress,
       //   data: secondData,
       // })
@@ -77,7 +77,7 @@ export const SendBatch = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [accountAddress, address, batchAccountApi, isConnected, provider, signer]);
+  }, [smartAccountAddress, address, smartAccountApi, isConnected, provider, signer]);
 
   return (
     <div>

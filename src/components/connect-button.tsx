@@ -1,6 +1,8 @@
+import { Button } from '@mui/material';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 import { Web3AuthConnector } from '@/auth/wagmi';
+import { shrink } from '@/utils/shrink';
 
 export const ConnectButton = () => {
   const { address, isConnected } = useAccount();
@@ -9,16 +11,16 @@ export const ConnectButton = () => {
   });
   const { disconnect } = useDisconnect();
 
-  const shortAddress = address && address.substring(0, 6) + '...' + address.substring(address.length - 4);
+  const shortAddress = shrink(address); // s
 
   console.log(address);
 
   return (
     <div>
       {isConnected ? (
-        <button onClick={() => disconnect()}>{shortAddress}</button>
+        <Button onClick={() => disconnect()}>{shortAddress}</Button>
       ) : (
-        <button onClick={() => connect()}>Connect</button>
+        <Button onClick={() => connect()}>Connect</Button>
       )}
     </div>
   );

@@ -5,14 +5,15 @@ import { useAccount, useProvider, useSigner } from 'wagmi';
 import { accountApiFactory } from '@/account-abstraction/account-api';
 import { BatchAccountAPI } from '@/account-abstraction/batch-simple-account-api';
 
-export const useBatchAccountApi = () => {
+//Make global
+export const useSmartAccount = () => {
   const { address, isConnected } = useAccount();
 
   const provider = useProvider();
   const { data: signer } = useSigner();
 
-  const [batchAccountApi, setBatchAccountApi] = useState<BatchAccountAPI | undefined>();
-  const [accountAddress, setAccountAddress] = useState<`0x${string}` | undefined>();
+  const [smartAccountApi, setSmartAccountApi] = useState<BatchAccountAPI | undefined>();
+  const [smartAccountAddress, setSmartAccountAddress] = useState<`0x${string}` | undefined>();
 
   useEffect(() => {
     (async () => {
@@ -23,10 +24,10 @@ export const useBatchAccountApi = () => {
             signer
           });
 
-          setBatchAccountApi(tempBatchAccountApi);
+          setSmartAccountApi(tempBatchAccountApi);
           const accAddress = (await tempBatchAccountApi.getAccountAddress()) as `0x${string}`;
 
-          setAccountAddress(accAddress);
+          setSmartAccountAddress(accAddress);
         }
       } catch (e) {
         console.error(e);
@@ -35,7 +36,7 @@ export const useBatchAccountApi = () => {
   }, [provider, isConnected, address, signer]);
 
   return {
-    batchAccountApi,
-    accountAddress
+    smartAccountApi,
+    smartAccountAddress
   };
 };

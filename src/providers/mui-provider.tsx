@@ -12,7 +12,11 @@ export const MuiProvider: CFC = ({ children }) => {
     () =>
       createTheme({
         palette: {
-          mode: prefersDarkMode ? 'dark' : 'light'
+          mode: prefersDarkMode ? 'dark' : 'light',
+          background: {
+            default: prefersDarkMode ? '#121212' : '#fff',
+            paper: prefersDarkMode ? '#1e1e1e' : '#fff'
+          }
         },
         components: {
           ...OverrideLinkBehaviorThemeComponents
