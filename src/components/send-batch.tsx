@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { EntryPoint__factory } from '@account-abstraction/contracts';
+import { Button } from '@mui/material';
 import { utils } from 'ethers';
 import { erc20ABI, useAccount, useBalance, useProvider, useSigner } from 'wagmi';
 
@@ -83,7 +84,7 @@ export const SendBatch = () => {
       <div>
         Token({tokenInfo?.symbol}) balance is {tokenInfo?.value.div(tokenInfo.decimals).toString()}
       </div>
-      <button onClick={async () => sendBatch()}>Send Batch</button>
+      <Button onClick={async () => sendBatch()}>Send Batch</Button>
     </div>
   );
 };

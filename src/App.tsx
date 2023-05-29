@@ -1,13 +1,13 @@
-import './App.css';
-import { ConnectButton } from './components/connect-button';
-import { SendBatch } from './components/send-batch';
+import { Layout } from './components/base';
 import { ProvidersSandwich } from './providers/providers-sandwich';
+import { Router } from './router/router';
 
 export function App() {
   return (
     <ProvidersSandwich>
-      <ConnectButton />
-      <SendBatch />
+      <Layout>
+        <Router />
+      </Layout>
     </ProvidersSandwich>
   );
 }
