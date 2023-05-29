@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
 
 export const StrategiesPage = () => {
-  return <Typography variant="h1">Strategies</Typography>;
+  return <Typography variant="h1">Stra</Typography>;
 };
