@@ -2,6 +2,7 @@ import { BlurCircular } from '@mui/icons-material';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 
 import { InfoPanel } from './info-panel/info-panel';
+import { ChangeMode } from '../change-mode';
 
 import { APP_NAME } from '@/config/constants';
 
@@ -16,6 +17,7 @@ export const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {APP_NAME}
           </Typography>
+          <ChangeMode />
           <InfoPanel />
         </Toolbar>
       </AppBar>
