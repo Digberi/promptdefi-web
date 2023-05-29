@@ -6,6 +6,8 @@ import { ConnectButton } from '@/components/connect-button';
 import { useSmartAccount } from '@/hooks/use-smart-account';
 import { shrink } from '@/utils/shrink';
 
+const bgcolor = 'background.paper';
+
 export const AccountPage = () => {
   const { address, isConnected } = useAccount();
   const { smartAccountAddress } = useSmartAccount();
@@ -17,7 +19,7 @@ export const AccountPage = () => {
       <ListItem
         sx={{
           borderRadius: 2,
-          bgcolor: 'background.paper'
+          bgcolor
         }}
       >
         <ListItemAvatar>
@@ -32,7 +34,7 @@ export const AccountPage = () => {
           <ListItem
             sx={{
               borderRadius: 2,
-              bgcolor: 'background.paper'
+              bgcolor
             }}
           >
             <ListItemAvatar>
@@ -46,7 +48,7 @@ export const AccountPage = () => {
           <ListItem
             sx={{
               borderRadius: 2,
-              bgcolor: 'background.paper',
+              bgcolor,
               mt: 3
             }}
           >
