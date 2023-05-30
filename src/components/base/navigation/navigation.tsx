@@ -15,7 +15,7 @@ export const Navigation = () => {
   return (
     <StyledBottomNavigation showLabels value={value} onChange={handleChange}>
       {NavigationConfig.list.map((item, index) => (
-        <BottomNavigationAction key={index} label={item.label} component={Link} href={item.link} />
+        <BottomNavigationAction key={index} label={item.label} component={Link} href={item.link} icon={item.icon} />
       ))}
     </StyledBottomNavigation>
   );
