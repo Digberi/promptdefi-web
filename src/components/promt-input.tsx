@@ -1,18 +1,14 @@
 import { useState } from 'react';
 
-import { Telegram } from '@mui/icons-material';
-import { Box, IconButton, TextareaAutosize, styled } from '@mui/material';
+import { Box, Button, TextareaAutosize, styled } from '@mui/material';
 
 const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
   width: '100%',
   minHeight: 25,
   resize: 'none',
-  padding: '10px',
-  fontSize: '16px',
-  backgroundColor: theme.palette.background.paper,
-  color: theme.palette.text.primary,
+  padding: 3,
   borderColor: 'transparent',
-  borderRadius: theme.spacing(2),
+  borderRadius: theme.spacing(0.5),
   outline: 'none'
 }));
 
@@ -27,10 +23,11 @@ export const PromptInput = () => {
     <Box
       sx={{
         display: 'flex',
-        bgcolor: 'background.paper',
-        borderRadius: 2,
-        //put in the end of the page,
-        justifySelf: 'flex-end'
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        flexDirection: 'column',
+        gap: 2
       }}
     >
       <StyledTextareaAutosize
@@ -38,10 +35,17 @@ export const PromptInput = () => {
         onChange={e => {
           setState(e.target.value || '');
         }}
+        placeholder="Enter Your Request"
       />
-      <IconButton onClick={onSubmit}>
-        <Telegram />
-      </IconButton>
+      <Button
+        sx={{
+          width: '100%'
+        }}
+        variant="contained"
+        onClick={onSubmit}
+      >
+        SEND REQUEST
+      </Button>
     </Box>
   );
 };
