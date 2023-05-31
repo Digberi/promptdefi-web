@@ -7,6 +7,7 @@ import Tabs from '@mui/material/Tabs';
 
 import { Page } from '@/components/base/page';
 import { PromptInput } from '@/components/promt-input';
+import { SendBatch } from '@/components/send-batch';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -81,6 +82,7 @@ export const HomePage = () => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
+        <SendBatch />
         <PromptInput />
       </TabPanel>
       <TabPanel value={value} index={1}>
