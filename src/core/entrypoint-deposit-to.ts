@@ -3,7 +3,7 @@ import { BigNumberish, Signer, utils } from 'ethers';
 
 import { ENTRYPOINT_ADDRESS } from '@/config/constants';
 
-export const EntryDepositTo = async (signer: Signer, smartAccountAddress: string, realAmount: BigNumberish) => {
+export const entryDepositTo = async (signer: Signer, smartAccountAddress: string, realAmount: BigNumberish) => {
   const entrypoint = EntryPoint__factory.connect(ENTRYPOINT_ADDRESS, signer);
 
   const result = await entrypoint.functions.depositTo(smartAccountAddress, {
@@ -13,7 +13,7 @@ export const EntryDepositTo = async (signer: Signer, smartAccountAddress: string
   const contractReceipt = await result.wait(1);
 
   return {
-    tx: result.hash,
+    tx: result,
     cr: contractReceipt
   };
 };
