@@ -20,7 +20,9 @@ export const ConnectButton = () => {
       {isConnected ? (
         <Button onClick={() => disconnect()}>{shortAddress}</Button>
       ) : (
-        <Button onClick={() => connect()}>Connect</Button>
+        <Button color="secondary" onClick={() => connect()}>
+          Connect
+        </Button>
       )}
     </div>
   );
