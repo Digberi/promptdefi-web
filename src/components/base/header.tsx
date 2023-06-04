@@ -5,8 +5,11 @@ import { InfoPanel } from './info-panel/info-panel';
 import { ChangeMode } from '../change-mode';
 
 import { APP_NAME } from '@/config/constants';
+import { useIsDesktop } from '@/hooks/is-desktop';
 
 export const Header = () => {
+  const { isDesktop } = useIsDesktop();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -18,7 +21,7 @@ export const Header = () => {
             {APP_NAME}
           </Typography>
           <ChangeMode />
-          <InfoPanel />
+          {!isDesktop && <InfoPanel />}
         </Toolbar>
       </AppBar>
     </Box>
