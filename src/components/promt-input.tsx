@@ -1,6 +1,12 @@
-import { useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Box, Button, TextareaAutosize, styled } from '@mui/material';
+
+interface PromptInputProps {
+  onSubmit: () => void;
+  placeholder: string;
+  promt?: string;
+}
 
 const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
   width: '100%',
@@ -12,12 +18,16 @@ const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
   outline: 'none'
 }));
 
-export const PromptInput = () => {
-  const [state, setState] = useState('');
-  const onSubmit = () => {
-    console.log(state);
-    setState('');
-  };
+export const PromptInput: FC<PromptInputProps> = ({ onSubmit, placeholder, promt }) => {
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    if (!promt) {
+      return;
+    }
+
+    setValue(promt);
+  }, [promt]);
 
   return (
     <Box
@@ -31,11 +41,11 @@ export const PromptInput = () => {
       }}
     >
       <StyledTextareaAutosize
-        value={state}
+        value={value}
         onChange={e => {
-          setState(e.target.value || '');
+          setValue(e.target.value || '');
         }}
-        placeholder="Enter Your Request"
+        placeholder={placeholder}
       />
       <Button
         sx={{

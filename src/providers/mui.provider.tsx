@@ -32,7 +32,14 @@ export const MuiProvider: CFC = ({ children }) => {
       createTheme({
         palette: pallettes[mode],
         components: {
-          ...OverrideLinkBehaviorThemeComponents
+          ...OverrideLinkBehaviorThemeComponents,
+          MuiCssBaseline: {
+            styleOverrides: themeParam => ({
+              body: {
+                backgroundColor: themeParam.palette.mode === 'dark' ? '#0A1929' : '#9C9C9C'
+              }
+            })
+          }
         }
       }),
     [mode]
