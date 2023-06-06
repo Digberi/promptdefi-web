@@ -25,10 +25,21 @@ type SendTokenParams = Erc20.CreateSendPreOpParams;
 
 interface SendTokenFormProps {
   data: SendTokenParams;
+  setData: (data: SendTokenParams) => void;
 }
 
-export const SendTokenForm: FC<SendTokenFormProps> = ({ data }) => {
+export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
   const [innerData, setInnerData] = useState<SendTokenParams>(data);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
+    setData(innerData);
+  };
 
   const selectedToken = tokens.find(token => token.address === innerData.tokenAddress);
 
@@ -42,7 +53,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data }) => {
   const handleAmountChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
     setInnerData(prev => ({
       ...prev,
-      amount: toAtomic(target.value, selectedToken?.decimals) ?? ''
+      atomicAmount: toAtomic(target.value, selectedToken?.decimals) ?? ''
     }));
   };
 
@@ -51,10 +62,6 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data }) => {
       ...prev,
       receiver: target.value
     }));
-  };
-
-  const handleSave = () => {
-    console.log(innerData);
   };
 
   return (
@@ -76,7 +83,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data }) => {
 
       <FormGroup>
         <ListSubheader>Token</ListSubheader>
-        <FormControl fullWidth>
+        <FormControl disabled={!isEditing} fullWidth>
           <InputLabel id="send-token-select-token-label">Select token</InputLabel>
           <Select value={innerData.tokenAddress} label="Select token" onChange={handleTokenChange}>
             {tokens.map((_token, index) => (
@@ -99,6 +106,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data }) => {
         <ListSubheader>Amount</ListSubheader>
         <FormControl fullWidth>
           <TextField
+            disabled={!isEditing}
             placeholder="Amount"
             value={toReal(innerData.atomicAmount, selectedToken?.decimals)}
             onChange={handleAmountChange}
@@ -109,7 +117,12 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data }) => {
       <FormGroup>
         <ListSubheader>Address</ListSubheader>
         <FormControl fullWidth>
-          <TextField placeholder="receiver" value={innerData.receiver} onChange={handleAddressChange} />
+          <TextField
+            disabled={!isEditing}
+            placeholder="receiver"
+            value={innerData.receiver}
+            onChange={handleAddressChange}
+          />
         </FormControl>
       </FormGroup>
 
@@ -120,7 +133,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data }) => {
           width: '100%'
         }}
       >
-        <Button onClick={handleSave}>Save</Button>
+        {isEditing ? <Button onClick={handleSave}>Save</Button> : <Button onClick={handleEdit}>Edit</Button>}
       </ButtonGroup>
     </Box>
   );

@@ -18,7 +18,7 @@ export const HomePage = () => {
     setMainTab();
   };
 
-  const { operations } = useOperations();
+  const { operations, updateOperation } = useOperations();
 
   return (
     <Page
@@ -28,7 +28,9 @@ export const HomePage = () => {
       }}
     >
       <Tabs />
-      <TabPanel index={0}>{operations && <FormsGenerator listOperations={operations} />}</TabPanel>
+      <TabPanel index={0}>
+        {operations && updateOperation && <FormsGenerator listOperations={operations} setOperation={updateOperation} />}
+      </TabPanel>
       <TabPanel index={1}>
         <Box sx={{ display: 'grid', gap: 2, mb: 2 }}>
           {templates.map((template, index) => (
