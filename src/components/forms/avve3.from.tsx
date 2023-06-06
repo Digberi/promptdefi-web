@@ -1,0 +1,149 @@
+import { ChangeEventHandler, FC, useState } from 'react';
+
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  Chip,
+  FormControl,
+  FormGroup,
+  InputLabel,
+  ListSubheader,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography
+} from '@mui/material';
+
+import { tokens } from '@/config/tokens';
+import { AAveV3 } from '@/core/support-operations/aave-v3';
+import { toAtomic, toReal } from '@/utils/units';
+
+type AAveV3Params =
+  | AAveV3.CreateBorrowPreOpParams
+  | AAveV3.CreateDepositPreOpParams
+  | AAveV3.CreateWithdrawPreOpParams
+  | AAveV3.CreateRepayPreOpParams;
+
+interface AAveV3FormProps<T> {
+  label?: string;
+  data: T;
+  setData: (data: T) => void;
+}
+
+export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
+  const Comp: FC<AAveV3FormProps<T>> = ({ data, setData }) => {
+    const [innerData, setInnerData] = useState<AAveV3FormProps<T>['data']>(data);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+
+    const handleEdit = () => {
+      setIsEditing(true);
+    };
+
+    const handleSave = () => {
+      setIsEditing(false);
+      setData(innerData);
+    };
+
+    const selectedToken = tokens.find(token => token.address === innerData.tokenAddress);
+
+    const handleTokenChange = ({ target }: SelectChangeEvent) => {
+      setInnerData(prev => ({
+        ...prev,
+        tokenAddress: target.value
+      }));
+    };
+
+    const handleAmountChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
+      setInnerData(prev => ({
+        ...prev,
+        atomicAmount: toAtomic(target.value, selectedToken?.decimals) ?? ''
+      }));
+    };
+
+    const handleAddressChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
+      setInnerData(prev => ({
+        ...prev,
+        receiver: target.value
+      }));
+    };
+
+    return (
+      <Box
+        sx={{
+          bgcolor: 'background.paper',
+          borderRadius: 2,
+          p: 2
+        }}
+      >
+        <ButtonGroup
+          sx={{
+            gap: 1
+          }}
+        >
+          <Chip label={label} />
+          <Chip label={label} />
+        </ButtonGroup>
+
+        <FormGroup>
+          <ListSubheader>Token</ListSubheader>
+          <FormControl disabled={!isEditing} fullWidth>
+            <InputLabel>Select token</InputLabel>
+            <Select value={innerData.tokenAddress} label="Select token" onChange={handleTokenChange}>
+              {tokens.map((_token, index) => (
+                <MenuItem key={index} value={_token.address}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1
+                    }}
+                  >
+                    <Avatar src={_token.logoURI} alt={_token.symbol} />
+                    <Typography variant="body1">{_token.symbol}</Typography>
+                  </Box>
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <ListSubheader>Amount</ListSubheader>
+          <FormControl fullWidth>
+            <TextField
+              disabled={!isEditing}
+              placeholder="Amount"
+              value={toReal(innerData.atomicAmount, selectedToken?.decimals)}
+              onChange={handleAmountChange}
+            />
+          </FormControl>
+        </FormGroup>
+
+        <FormGroup>
+          <ListSubheader>Address</ListSubheader>
+          <FormControl fullWidth>
+            <TextField
+              disabled={!isEditing}
+              placeholder="receiver"
+              value={innerData.receiver}
+              onChange={handleAddressChange}
+            />
+          </FormControl>
+        </FormGroup>
+
+        <ButtonGroup
+          sx={{
+            mt: 2,
+            justifyContent: 'flex-end',
+            width: '100%'
+          }}
+        >
+          {isEditing ? <Button onClick={handleSave}>Save</Button> : <Button onClick={handleEdit}>Edit</Button>}
+        </ButtonGroup>
+      </Box>
+    );
+  };
+
+  return Comp;
+};

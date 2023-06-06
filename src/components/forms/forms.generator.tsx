@@ -2,7 +2,10 @@ import { FC } from 'react';
 
 import { Box } from '@mui/material';
 
-import { SendTokenForm } from './send-token';
+import { createAaveV3Form } from './avve3.from';
+import { LidoDepositForm } from './lido-deposit.form';
+import { SendTokenForm } from './send-token.from';
+import { WrapEthForm } from './wrap-eth.from';
 
 import { OperationData } from '@/core/operations/operation.type';
 import { Operation } from '@/core/operations/operations.enum';
@@ -14,8 +17,14 @@ interface FormGeneratorProps {
 }
 
 const FormsDictionary = {
-  [Operation.SendToken]: SendTokenForm
-};
+  [Operation.SendToken]: SendTokenForm,
+  [Operation.LidoDeposit]: LidoDepositForm,
+  [Operation.WrapEth]: WrapEthForm,
+  [Operation.AaveBorrow]: createAaveV3Form('Aave borrow'),
+  [Operation.AaveDeposit]: createAaveV3Form('Aave deposit'),
+  [Operation.AaveWithdraw]: createAaveV3Form('Aave withdraw'),
+  [Operation.AaveRepay]: createAaveV3Form('Aave repay')
+} as const;
 
 export const FormsGenerator: FC<FormGeneratorProps> = ({ listOperations, setOperation }) => {
   return (
@@ -26,20 +35,18 @@ export const FormsGenerator: FC<FormGeneratorProps> = ({ listOperations, setOper
       }}
     >
       {listOperations.map((operation, index) => {
-        if (operation.kind === Operation.SendToken) {
-          const Form = FormsDictionary[operation.kind];
+        const Form = FormsDictionary[operation.kind];
 
-          const setData = (data: Erc20.CreateSendPreOpParams) => {
-            setOperation(index, {
-              kind: operation.kind,
-              data
-            });
-          };
+        //TODO: fix types
+        const setData = (data: Erc20.CreateSendPreOpParams) => {
+          setOperation(index, {
+            kind: operation.kind,
+            data
+          });
+        };
 
-          return <Form key={index} data={operation.data} setData={setData} />;
-        } else {
-          return null;
-        }
+        //@ts-ignore
+        return <Form key={index} data={operation.data} setData={setData} />;
       })}
     </Box>
   );

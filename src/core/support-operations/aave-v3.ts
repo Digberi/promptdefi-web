@@ -6,7 +6,7 @@ import { aaveV3PoolABI } from '@/config/abi';
 import { AAVE_V3_POOL_CONTRACT_ADDRESS } from '@/config/contracts';
 import { PreOpStruct } from '@/types/custom';
 
-namespace AAveV3 {
+export namespace AAveV3 {
   export interface CreateBorrowPreOpParams {
     tokenAddress: string;
     atomicAmount: BigNumberish;

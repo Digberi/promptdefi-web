@@ -4,7 +4,7 @@ import wrapEthABI from '@/config/abi/wrap-eth.abi.json';
 import { WRAP_ETH_CONTRACT_ADDRESS } from '@/config/contracts';
 import { PreOpStruct } from '@/types/custom';
 
-namespace WrapEth {
+export namespace WrapEth {
   export interface CreateDepositPreOpParams {
     atomicAmount: BigNumberish;
   }

@@ -4,7 +4,7 @@ import lidoAbi from '@/config/abi/lido.abi.json';
 import { LIDO_CONTRACT_ADDRESS } from '@/config/contracts';
 import { PreOpStruct } from '@/types/custom';
 
-namespace Lido {
+export namespace Lido {
   export interface CreateDepositPreOpParams {
     atomicAmount: BigNumberish;
   }
