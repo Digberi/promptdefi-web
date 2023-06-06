@@ -31,6 +31,7 @@ export const useTabs = (tabs: Array<string>) => {
       <MTabs value={value} onChange={handleChange} aria-label="basic tabs example">
         {tabs.map((tab, index) => (
           <Tab
+            key={tab}
             sx={{
               width: `calc(100% / ${tabs.length})`
             }}

@@ -3,27 +3,22 @@ import { Box } from '@mui/material';
 import { useHomeViewModel } from './home.page.vm';
 
 import { Page } from '@/components/base/page';
-import { ConnectButton } from '@/components/connect-button';
-import { PromptInput } from '@/components/promt-input';
-import { SendBatch } from '@/components/send-batch';
+import { FormsGenerator } from '@/components/forms/forms.generator';
 import { Template } from '@/components/template';
 import { templates } from '@/config/templates';
 import { useTabs } from '@/hooks/use-tabs';
+import { useOperations } from '@/providers/operations';
 
 export const HomePage = () => {
   const { Tabs, TabPanel, setMainTab } = useTabs(['Request', 'Templates']);
-  const { sendPromt, promtMessage, setPromtMessage } = useHomeViewModel();
+  const { /*sendPromt, promtMessage,*/ setPromtMessage } = useHomeViewModel();
 
-  const onSubmit = () => {
-    sendPromt(promtMessage, result => {
-      console.log('success' + result);
-    });
-    setPromtMessage('');
-  };
   const setTemplate = (message: string) => {
     setPromtMessage(message);
     setMainTab();
   };
+
+  const { operations } = useOperations();
 
   return (
     <Page
@@ -33,15 +28,11 @@ export const HomePage = () => {
       }}
     >
       <Tabs />
-      <TabPanel index={0}>
-        <ConnectButton />
-        <SendBatch />
-        <PromptInput onSubmit={onSubmit} placeholder="Enter your request" promt={promtMessage} />
-      </TabPanel>
+      <TabPanel index={0}>{operations && <FormsGenerator listOperations={operations} />}</TabPanel>
       <TabPanel index={1}>
         <Box sx={{ display: 'grid', gap: 2, mb: 2 }}>
-          {templates.map(template => (
-            <Template text={template} use={setTemplate} />
+          {templates.map((template, index) => (
+            <Template key={index} text={template} use={setTemplate} />
           ))}
         </Box>
       </TabPanel>
