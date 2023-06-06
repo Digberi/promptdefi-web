@@ -1,5 +1,5 @@
 export interface Token {
-  address: string;
+  address: `0x${string}`;
   logoURI: string;
   symbol: string;
   name: string;
@@ -8,24 +8,46 @@ export interface Token {
 
 export const tokens: Array<Token> = [
   {
-    address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+    address: '0x2E8D98fd126a32362F2Bd8aA427E59a1ec63F780',
     logoURI: 'https://etherscan.io/token/images/tethernew_32.png',
     decimals: 6,
     symbol: 'USDT',
     name: 'Tether USD'
   },
   {
-    address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
-    logoURI: 'https://etherscan.io/token/images/bnb_28_2.png',
-    decimals: 18,
-    symbol: 'BNB',
-    name: 'BNB'
-  },
-  {
-    address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    address: '0x65aFADD39029741B3b8f0756952C74678c9cEC93',
     logoURI: 'https://etherscan.io/token/images/centre-usdc_28.png',
     decimals: 6,
     symbol: 'USDC',
     name: 'USD Coin'
+  },
+  {
+    address: '0xe9c4393a23246293a8D31BF7ab68c17d4CF90A29',
+    logoURI: 'https://etherscan.io/token/images/chainlink_32.png',
+    decimals: 18,
+    symbol: 'LINK',
+    name: 'Chainlink'
+  },
+  {
+    address: '0xBC33cfbD55EA6e5B97C6da26F11160ae82216E2b',
+    logoURI: 'https://etherscan.io/token/images/stasis-eurs_32.png',
+    decimals: 2,
+    symbol: 'EURS',
+    name: 'STASIS EURS Token'
+  },
+  {
+    address: '0x8153A21dFeB1F67024aA6C6e611432900FF3dcb9',
+    logoURI: 'https://etherscan.io/token/images/aave_32.png',
+    decimals: 18,
+    symbol: 'AAVE',
+    name: 'Aave Token'
   }
+];
+
+export const tokenAddresses = [
+  '0x2E8D98fd126a32362F2Bd8aA427E59a1ec63F780', // USDT
+  '0x65aFADD39029741B3b8f0756952C74678c9cEC93', // USDC
+  '0xe9c4393a23246293a8D31BF7ab68c17d4CF90A29', // LINK
+  '0xBC33cfbD55EA6e5B97C6da26F11160ae82216E2b', //EURS
+  '0x8153A21dFeB1F67024aA6C6e611432900FF3dcb9' //AAVE
 ];
