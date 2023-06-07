@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { CssBaseline, PaletteMode, PaletteOptions, ThemeProvider, createTheme } from '@mui/material';
+import { indigo, blueGrey } from '@mui/material/colors';
 
 import { useColorMode } from './mode.provider';
 
@@ -11,8 +12,12 @@ const pallettes: Record<PaletteMode, PaletteOptions> = {
   light: {
     mode: 'light',
     background: {
-      default: '#fff',
+      default: blueGrey[50],
       paper: '#fff'
+    },
+    header: {
+      background: indigo[500],
+      text: '#fff'
     }
   },
   dark: {
@@ -20,6 +25,10 @@ const pallettes: Record<PaletteMode, PaletteOptions> = {
     background: {
       default: '#121212',
       paper: '#1e1e1e'
+    },
+    header: {
+      background: indigo[500],
+      text: '#fff'
     }
   }
 };
@@ -32,14 +41,7 @@ export const MuiProvider: CFC = ({ children }) => {
       createTheme({
         palette: pallettes[mode],
         components: {
-          ...OverrideLinkBehaviorThemeComponents,
-          MuiCssBaseline: {
-            styleOverrides: themeParam => ({
-              body: {
-                backgroundColor: themeParam.palette.mode === 'dark' ? '#0A1929' : '#9C9C9C'
-              }
-            })
-          }
+          ...OverrideLinkBehaviorThemeComponents
         }
       }),
     [mode]

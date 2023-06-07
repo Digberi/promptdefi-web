@@ -41,6 +41,8 @@ export const AccountPage = () => {
   const { smartAccountAddress } = useSmartAccount();
   const { chain } = useNetwork();
 
+  console.log({ smartAccountAddress });
+
   return (
     <Page>
       <ConnectButton />

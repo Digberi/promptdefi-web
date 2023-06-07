@@ -41,7 +41,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
     setData(innerData);
   };
 
-  const selectedToken = tokens.find(token => token.address === innerData.tokenAddress);
+  const selectedToken = tokens.find(token => token.address === innerData.tokenAddress)!;
 
   const handleTokenChange = ({ target }: SelectChangeEvent) => {
     setInnerData(prev => ({
@@ -53,7 +53,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
   const handleAmountChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
     setInnerData(prev => ({
       ...prev,
-      atomicAmount: toAtomic(target.value, selectedToken?.decimals) ?? ''
+      atomicAmount: toAtomic(target.value, selectedToken.decimals) ?? ''
     }));
   };
 

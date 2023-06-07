@@ -13,7 +13,7 @@ export const ChangeMode = () => {
           backgroundColor: 'transparent'
         },
         '& svg:hover': theme => ({
-          color: 'red',
+          color: theme.palette.header.text,
           transition: theme.transitions.create('color', {
             duration: theme.transitions.duration.standard
           })

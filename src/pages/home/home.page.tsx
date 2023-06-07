@@ -4,31 +4,34 @@ import { useSigner } from 'wagmi';
 import { useHomeViewModel } from './home.page.vm';
 
 import { Page } from '@/components/base/page';
+import { ConnectButton } from '@/components/connect-button';
 import { FormsGenerator } from '@/components/forms/forms.generator';
+import { TabPanel, Tabs, useTab } from '@/components/tabs';
 import { Template } from '@/components/template';
 import { templates } from '@/config/templates';
 import { sendEth } from '@/core/send-eth';
-import { useTabs } from '@/hooks/use-tabs';
 import { useOperations } from '@/providers/operations';
 import { toAtomic } from '@/utils/units';
 
+const tabs = ['Request', 'Templates'];
+
 export const HomePage = () => {
-  const { Tabs, TabPanel, setMainTab } = useTabs(['Request', 'Templates']);
   const { /*sendPromt, promtMessage,*/ setPromtMessage } = useHomeViewModel();
   const { data: signer } = useSigner();
+  const { setMainTab } = useTab();
 
   const setTemplate = (message: string) => {
     setPromtMessage(message);
     setMainTab();
   };
 
-  const { operations, updateOperation } = useOperations();
+  const { operations, updateOperation, sendOperations } = useOperations();
 
   const handleSend = async () => {
     if (!signer) {
       return console.log('no signer');
     }
-    const result = await sendEth(signer, '0xa42635bcBA235B74f49C9dBf78Fed7b5aba8EA70', toAtomic('0.01', 18)!);
+    const result = await sendEth(signer, '0x4C202F3507552B913eB930eF2906789a9210742f', toAtomic('0.02', 18)!);
     console.log({ result });
   };
 
@@ -39,10 +42,12 @@ export const HomePage = () => {
         pb: 3
       }}
     >
-      <Tabs />
+      <Tabs tabs={tabs} />
       <TabPanel index={0}>
+        <ConnectButton />
         <Button onClick={handleSend}>Send Eth</Button>
         {operations && updateOperation && <FormsGenerator listOperations={operations} setOperation={updateOperation} />}
+        <Button onClick={sendOperations}>Send</Button>
       </TabPanel>
       <TabPanel index={1}>
         <Box sx={{ display: 'grid', gap: 2, mb: 2 }}>

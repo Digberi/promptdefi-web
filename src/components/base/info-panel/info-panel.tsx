@@ -12,7 +12,11 @@ export const InfoPanel = () => {
   return (
     <div>
       <IconButton key={anchor} onClick={toggleDrawer(true)}>
-        <ErrorOutline />
+        <ErrorOutline
+          sx={{
+            color: 'header.text'
+          }}
+        />
       </IconButton>
       <SwipeableDrawer anchor={anchor} open={isOpen} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
         <Box sx={{ width: '100vw' }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>

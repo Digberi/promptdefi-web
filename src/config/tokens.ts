@@ -8,6 +8,13 @@ export interface Token {
 
 export const tokens: Array<Token> = [
   {
+    address: '0xeth',
+    logoURI: 'https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025',
+    decimals: 18,
+    symbol: 'ETH',
+    name: 'Ethereum'
+  },
+  {
     address: '0x2E8D98fd126a32362F2Bd8aA427E59a1ec63F780',
     logoURI: 'https://etherscan.io/token/images/tethernew_32.png',
     decimals: 6,
@@ -23,14 +30,14 @@ export const tokens: Array<Token> = [
   },
   {
     address: '0xe9c4393a23246293a8D31BF7ab68c17d4CF90A29',
-    logoURI: 'https://etherscan.io/token/images/chainlink_32.png',
+    logoURI: 'https://etherscan.io/token/images/chainlinktoken_32.png',
     decimals: 18,
     symbol: 'LINK',
     name: 'Chainlink'
   },
   {
     address: '0xBC33cfbD55EA6e5B97C6da26F11160ae82216E2b',
-    logoURI: 'https://etherscan.io/token/images/stasis-eurs_32.png',
+    logoURI: 'https://etherscan.io/token/images/statiseuro_28.png',
     decimals: 2,
     symbol: 'EURS',
     name: 'STASIS EURS Token'

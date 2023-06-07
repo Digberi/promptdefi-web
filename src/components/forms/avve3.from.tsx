@@ -47,7 +47,7 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
       setData(innerData);
     };
 
-    const selectedToken = tokens.find(token => token.address === innerData.tokenAddress);
+    const selectedToken = tokens.find(token => token.address === innerData.tokenAddress)!;
 
     const handleTokenChange = ({ target }: SelectChangeEvent) => {
       setInnerData(prev => ({
@@ -59,7 +59,7 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
     const handleAmountChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
       setInnerData(prev => ({
         ...prev,
-        atomicAmount: toAtomic(target.value, selectedToken?.decimals) ?? ''
+        atomicAmount: toAtomic(target.value, selectedToken.decimals) ?? ''
       }));
     };
 

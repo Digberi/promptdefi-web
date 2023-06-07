@@ -6,7 +6,7 @@ import { useSigner } from 'wagmi';
 
 import { useSmartAccount } from './use-smart-account';
 
-import { ENTRYPOINT_ADDRESS } from '@/config/constants';
+import { ENTRYPOINT_ADDRESS } from '@/config/contracts';
 
 export const useEntrypointDepositBalance = () => {
   const [balance, setBalance] = useState<BigNumber>(BigNumber.from(0));

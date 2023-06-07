@@ -42,18 +42,32 @@ export const OperationsProvider: CFC = ({ children }) => {
       return;
     }
 
-    const batchPreOp = operations.reduce((acc, operation) => {
+    const batchPreOp = await operations.reduce(async (acc, operation) => {
+      const accum = await acc;
+
       const creator = OperationDictionary[operation.kind];
 
       // @ts-ignore
-      return acc.concat(creator(operation.data));
-    }, [] as Array<PreOpStruct>);
+      const preOp = await creator(operation.data);
+
+      return accum.concat(preOp);
+    }, Promise.resolve([]) as Promise<Array<PreOpStruct>>);
 
     const batchOp = preOpToBatchOp(batchPreOp);
 
-    const op = await smartAccountApi.createSignedUserBatchOp(batchOp);
+    console.log({ batchOp });
 
-    await bundlerClient.sendUserOpToBundler(op);
+    const unsignedBatchOp = await smartAccountApi.createUnsignedUserBatchOp(batchOp);
+
+    console.log({ unsignedBatchOp });
+
+    const op = await smartAccountApi.signUserOp(unsignedBatchOp);
+
+    console.log({ op });
+
+    const some = await bundlerClient.sendUserOpToBundler(op);
+
+    console.log({ some });
 
     setOperations([]);
   };

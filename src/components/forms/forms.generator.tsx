@@ -5,11 +5,11 @@ import { Box } from '@mui/material';
 import { createAaveV3Form } from './avve3.from';
 import { LidoDepositForm } from './lido-deposit.form';
 import { SendTokenForm } from './send-token.from';
+import { UniswapForm } from './uniswap.form';
 import { WrapEthForm } from './wrap-eth.from';
 
 import { OperationData } from '@/core/operations/operation.type';
 import { Operation } from '@/core/operations/operations.enum';
-import { Erc20 } from '@/core/support-operations/erc20-token';
 
 interface FormGeneratorProps {
   listOperations: Array<OperationData>;
@@ -23,7 +23,8 @@ const FormsDictionary = {
   [Operation.AaveBorrow]: createAaveV3Form('Aave borrow'),
   [Operation.AaveDeposit]: createAaveV3Form('Aave deposit'),
   [Operation.AaveWithdraw]: createAaveV3Form('Aave withdraw'),
-  [Operation.AaveRepay]: createAaveV3Form('Aave repay')
+  [Operation.AaveRepay]: createAaveV3Form('Aave repay'),
+  [Operation.UniswapSwap]: UniswapForm
 } as const;
 
 export const FormsGenerator: FC<FormGeneratorProps> = ({ listOperations, setOperation }) => {
@@ -38,7 +39,8 @@ export const FormsGenerator: FC<FormGeneratorProps> = ({ listOperations, setOper
         const Form = FormsDictionary[operation.kind];
 
         //TODO: fix types
-        const setData = (data: Erc20.CreateSendPreOpParams) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const setData = (data: any) => {
           setOperation(index, {
             kind: operation.kind,
             data

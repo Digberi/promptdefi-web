@@ -1,11 +1,12 @@
-import { UserOperationStruct } from '@account-abstraction/contracts';
+import { EntryPoint, UserOperationStruct } from '@account-abstraction/contracts';
 import { SimpleAccountAPI } from '@account-abstraction/sdk';
 import { TransactionDetailsForUserOp } from '@account-abstraction/sdk/dist/src/TransactionDetailsForUserOp';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import { utils } from 'ethers';
 
 interface TransactionDetailsForUserBatchOp extends Omit<TransactionDetailsForUserOp, 'target' | 'value' | 'data'> {
   target: Array<string>;
-  value?: Array<BigNumberish>;
+  value: Array<BigNumberish>;
   data: Array<string>;
 }
 
@@ -25,10 +26,14 @@ export class BatchAccountAPI extends SimpleAccountAPI {
    * @param info
    */
   async createUnsignedUserBatchOp(info: TransactionDetailsForUserBatchOp): Promise<UserOperationStruct> {
+    // eslint-disable-next-line no-debugger
+    // debugger;
     const { callData, callGasLimit } = await this.encodeUserBatchOpCallDataAndGasLimit(info);
+
     const initCode = await this.getInitCode();
 
     const initGas = await this.estimateCreationGas(initCode);
+
     const verificationGasLimit = BigNumber.from(await this.getVerificationGasLimit()).add(initGas);
 
     let { maxFeePerGas, maxPriorityFeePerGas } = info;
@@ -42,10 +47,12 @@ export class BatchAccountAPI extends SimpleAccountAPI {
       }
     }
 
+    const nonce = info.nonce ?? (await this.getNonce());
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const partialUserOp: any = {
       sender: this.getAccountAddress(),
-      nonce: info.nonce ?? this.getNonce(),
+      nonce,
       initCode,
       callData,
       callGasLimit,
@@ -76,29 +83,35 @@ export class BatchAccountAPI extends SimpleAccountAPI {
   async encodeUserBatchOpCallDataAndGasLimit(
     detailsForUserOp: TransactionDetailsForUserBatchOp
   ): Promise<{ callData: string; callGasLimit: BigNumber }> {
-    function parseNumber(a: unknown): BigNumber | null {
-      if (a == null || a === '') {
-        return null;
-      }
+    try {
+      const parseNumber = (a: unknown): BigNumber | null => {
+        if (a == null || a === '') {
+          return null;
+        }
 
-      return BigNumber.from(a.toString());
+        return BigNumber.from(a.toString());
+      };
+
+      const values = detailsForUserOp.value.map(val => parseNumber(val) ?? BigNumber.from(0));
+      const callData = await this.encodeExecuteBatch(detailsForUserOp.target, values, detailsForUserOp.data);
+
+      const callGasLimit =
+        parseNumber(detailsForUserOp.gasLimit) ??
+        (await this.provider.estimateGas({
+          from: this.entryPointAddress,
+          to: this.getAccountAddress(),
+          data: callData
+        }));
+
+      return {
+        callData,
+        callGasLimit
+      };
+    } catch (e) {
+      console.error('error in encodeUserBatchOpCallDataAndGasLimit');
+      console.error(e);
+      throw e;
     }
-
-    // const value = detailsForUserOp.value.map(value => parseNumber(value) ?? BigNumber.from(0))
-    const callData = await this.encodeExecuteBatch(detailsForUserOp.target, [], detailsForUserOp.data);
-
-    const callGasLimit =
-      parseNumber(detailsForUserOp.gasLimit) ??
-      (await this.provider.estimateGas({
-        from: this.entryPointAddress,
-        to: this.getAccountAddress(),
-        data: callData
-      }));
-
-    return {
-      callData,
-      callGasLimit
-    };
   }
 
   /**
@@ -107,9 +120,30 @@ export class BatchAccountAPI extends SimpleAccountAPI {
    * @param value
    * @param data
    */
-  async encodeExecuteBatch(target: Array<string>, _value: Array<BigNumber>, data: Array<string>): Promise<string> {
-    const accountContract = await this._getAccountContract();
+  async encodeExecuteBatch(target: Array<string>, value: Array<BigNumber>, data: Array<string>): Promise<string> {
+    const I = new utils.Interface(['function executeBatch(address[] target, uint256[] value, bytes[] data) external']);
 
-    return accountContract.interface.encodeFunctionData('executeBatch', [target, data]);
+    return I.encodeFunctionData('executeBatch', [target, value, data]);
+  }
+
+  async getNonce(): Promise<BigNumber> {
+    if (await this.checkAccountPhantom()) {
+      return BigNumber.from(0);
+    }
+
+    //@ts-ignore
+    const entryPoint = this.entryPointView as EntryPoint;
+
+    const accountAddress = await this.getAccountAddress();
+
+    console.log({ accountAddress });
+
+    const nonce = await entryPoint.getNonce(accountAddress, '0');
+
+    console.log({ nonce });
+
+    return nonce;
+
+    return await super.getNonce();
   }
 }
