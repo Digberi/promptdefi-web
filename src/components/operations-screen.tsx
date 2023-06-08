@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { ArrowBack, Settings } from '@mui/icons-material';
-import { Backdrop, Box, Button, ButtonGroup, Icon, IconButton, Typography, styled } from '@mui/material';
+import { Backdrop, Box, Button, ButtonGroup, IconButton, Typography, styled } from '@mui/material';
 
 import { FormsGenerator } from './forms/forms.generator';
 
