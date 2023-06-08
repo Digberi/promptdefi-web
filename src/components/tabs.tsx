@@ -3,6 +3,7 @@ import { FC, createContext, useContext, useState } from 'react';
 import { Box, Tabs as MTabs, Tab } from '@mui/material';
 
 import { TabPanel as CTabPanel } from '@/components/base/tab-panel';
+import { useIsDesktop } from '@/hooks/is-desktop';
 import { CFC } from '@/types/react';
 
 function a11yProps(index: number) {
@@ -46,6 +47,7 @@ interface TabsProps {
 
 export const Tabs: FC<TabsProps> = ({ tabs }) => {
   const { value, handleChange } = useTab();
+  const { isDesktop } = useIsDesktop();
 
   return (
     <Box
@@ -55,8 +57,8 @@ export const Tabs: FC<TabsProps> = ({ tabs }) => {
         backgroundColor: 'background.paper',
         borderBottom: 1,
         borderColor: 'divider',
-        borderTopLeftRadius: theme => theme.spacing(1),
-        borderTopRightRadius: theme => theme.spacing(1)
+        borderTopLeftRadius: isDesktop ? theme => theme.spacing(1) : 0,
+        borderTopRightRadius: isDesktop ? theme => theme.spacing(1) : 0
       }}
     >
       {/* <Box
@@ -95,7 +97,16 @@ export const TabPanel: CFC<{ index: number }> = ({ index, children }) => {
   const { value } = useTab();
 
   return (
-    <CTabPanel value={value} index={index}>
+    <CTabPanel
+      sx={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+      value={value}
+      index={index}
+      id="scaffold-tabpanel"
+    >
       {children}
     </CTabPanel>
   );
