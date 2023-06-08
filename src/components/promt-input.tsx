@@ -1,6 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { Box, Button, TextareaAutosize, styled } from '@mui/material';
+
+import { MicroSpeechRecognition } from '@/components/speech-recognition';
+import { SpeechRecognitionCustomResult } from '@/hooks/use-speech-recognition';
 
 interface PromptInputProps {
   onSubmit: () => void;
@@ -29,6 +32,12 @@ export const PromptInput: FC<PromptInputProps> = ({ onSubmit, placeholder, promt
     setValue(promt);
   }, [promt]);
 
+  const onRecognitionResult = useCallback((result: SpeechRecognitionCustomResult) => {
+    if (result.confidence > 0.6) {
+      setValue(result.transcript);
+    }
+  }, []);
+
   return (
     <Box
       sx={{
@@ -40,13 +49,23 @@ export const PromptInput: FC<PromptInputProps> = ({ onSubmit, placeholder, promt
         gap: 2
       }}
     >
-      <StyledTextareaAutosize
-        value={value}
-        onChange={e => {
-          setValue(e.target.value || '');
+      <Box
+        sx={{
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          gap: 1
         }}
-        placeholder={placeholder}
-      />
+      >
+        <StyledTextareaAutosize
+          value={value}
+          onChange={e => {
+            setValue(e.target.value || '');
+          }}
+          placeholder={placeholder}
+        />
+        <MicroSpeechRecognition onRecognitionResult={onRecognitionResult} />
+      </Box>
       <Button
         sx={{
           width: '100%'
