@@ -15,7 +15,7 @@ export class WrapEth {
   static readonly CONTRACT_ADDRESS = WRAP_ETH_CONTRACT_ADDRESS;
 
   static createDepositPreOp({ atomicAmount }: WrapEth.CreateDepositPreOpParams): Array<PreOpStruct> {
-    const data = WrapEth.Interface.encodeFunctionData('deposit', []);
+    const data = WrapEth.Interface.encodeFunctionData('deposit');
 
     return [
       {

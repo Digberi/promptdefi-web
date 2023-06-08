@@ -22,7 +22,6 @@ import { MAX_FEE_PER_GAS, MAX_PRIORITY_FEE_PER_GAS } from '@/config/constants';
 import { POOL_FACTORY_CONTRACT_ADDRESS, QUOTER_CONTRACT_ADDRESS, SWAP_ROUTER_ADDRESS } from '@/config/contracts';
 import { Token as IToken, tokens } from '@/config/tokens';
 import { PreOpStruct } from '@/types/custom';
-import { fromReadableAmount, toAtomic } from '@/utils/units';
 
 //#region Types
 type TokenTrade = Trade<Token, Token, TradeType>;
@@ -45,27 +44,34 @@ interface getPoolInfoOptions {
 
 interface getOutputQuoteOptions {
   route: Route<Currency, Currency>;
-  amountIn: string;
+  atomicAmountIn: string;
   tokenIn: Token;
 }
 
 interface createTradeOptions {
   tokenIn: Token;
   tokenOut: Token;
-  amountIn: string;
+  atomicAmountIn: string;
+  poolFee?: FeeAmount;
+}
+
+interface getRouteAndQuoteOptions {
+  tokenIn: Token;
+  tokenOut: Token;
+  atomicAmountIn: string;
   poolFee?: FeeAmount;
 }
 
 interface executeTradeOptions {
   trade: TokenTrade;
   tokenIn: Token;
-  amountIn: string;
+  atomicAmountIn: string;
 }
 
 interface swapOptions {
   tokenIn?: IToken;
   tokenOut?: IToken;
-  amountIn: string;
+  atomicAmountIn: string;
 }
 //#endregion Types
 
@@ -77,8 +83,8 @@ export namespace Uniswap {
   }
 }
 
-const createToken = (token?: IToken) => {
-  if (token && token.symbol !== 'ETH') {
+export const createToken = (token?: IToken) => {
+  if (token && token.address) {
     return new Token(goerli.id, token.address, token.decimals, token.symbol, token.name);
   } else {
     const weth = WETH[goerli.id];
@@ -101,7 +107,7 @@ const prePareTokenPair = ({ tokenA, tokenB }: { tokenA?: IToken; tokenB?: IToken
 };
 
 export class Uniswap {
-  private static instance: Uniswap | null = null;
+  static instance: Uniswap | null = null;
 
   static create(provider: providers.Provider, walletAddress: string) {
     Uniswap.instance = new Uniswap(provider, walletAddress);
@@ -112,27 +118,25 @@ export class Uniswap {
       throw new Error('Uniswap instance not initialized');
     }
 
-    const tokenIn = tokens.find(token => token.symbol === tokenSymbolIn)!;
-    const tokenOut = tokens.find(token => token.symbol === tokenSymbolOut)!;
-
-    const amountIn = fromReadableAmount(Number(atomicAmount), tokenIn.decimals).toString();
+    const tokenIn = tokens.find(token => token.symbol === tokenSymbolIn);
+    const tokenOut = tokens.find(token => token.symbol === tokenSymbolOut);
 
     return await Uniswap.instance.createSwapPreOp({
       tokenIn,
       tokenOut,
-      amountIn
+      atomicAmountIn: atomicAmount
     });
   }
 
   constructor(private readonly provider: providers.Provider, private readonly walletAddress: string) {}
 
-  async createSwapPreOp({ tokenIn: tokenA, tokenOut: tokenB, amountIn }: swapOptions) {
+  async createSwapPreOp({ tokenIn: tokenA, tokenOut: tokenB, atomicAmountIn }: swapOptions) {
     const { tokenIn, tokenOut, needWeth } = prePareTokenPair({ tokenA, tokenB });
     const operations: Array<PreOpStruct> = [];
 
     if (needWeth) {
       const wrapEthPreOp = WrapEth.createDepositPreOp({
-        atomicAmount: toAtomic(amountIn, tokenIn.decimals).toString()
+        atomicAmount: atomicAmountIn
       });
 
       operations.push(...wrapEthPreOp);
@@ -141,13 +145,18 @@ export class Uniswap {
     const trade = await this.createTrade({
       tokenIn,
       tokenOut,
-      amountIn
+      atomicAmountIn
+    });
+
+    console.log({
+      amountIn: trade.inputAmount.toFixed(),
+      amountOut: trade.outputAmount.toFixed()
     });
 
     const tradePreOp = this.createTradePreOp({
       trade,
       tokenIn,
-      amountIn
+      atomicAmountIn
     });
 
     console.log(tradePreOp);
@@ -155,9 +164,7 @@ export class Uniswap {
     return operations.concat(tradePreOp);
   }
 
-  private createTradePreOp({ trade, tokenIn, amountIn }: executeTradeOptions): Array<PreOpStruct> {
-    const atomicAmountIn = toAtomic(amountIn, tokenIn.decimals)?.toString();
-
+  private createTradePreOp({ trade, tokenIn, atomicAmountIn }: executeTradeOptions): Array<PreOpStruct> {
     const approvePreOp = Erc20.createApprovePreOp({
       confidant: SWAP_ROUTER_ADDRESS,
       tokenAddress: tokenIn.address,
@@ -186,9 +193,29 @@ export class Uniswap {
   private async createTrade({
     tokenIn,
     tokenOut,
-    amountIn,
+    atomicAmountIn,
     poolFee = FeeAmount.MEDIUM
   }: createTradeOptions): Promise<TokenTrade> {
+    const { route: swapRoute, amountOut } = await this.getRouteAndQuote({
+      tokenIn,
+      tokenOut,
+      atomicAmountIn,
+      poolFee
+    });
+
+    console.log({
+      amountOut: JSBI.BigInt(amountOut).toString()
+    });
+
+    return Trade.createUncheckedTrade({
+      route: swapRoute,
+      inputAmount: CurrencyAmount.fromRawAmount(tokenIn, atomicAmountIn),
+      outputAmount: CurrencyAmount.fromRawAmount(tokenOut, JSBI.BigInt(amountOut)),
+      tradeType: TradeType.EXACT_INPUT
+    });
+  }
+
+  async getRouteAndQuote({ tokenIn, tokenOut, atomicAmountIn, poolFee = FeeAmount.MEDIUM }: getRouteAndQuoteOptions) {
     const poolInfo = await this.getPoolInfo({
       tokenIn,
       tokenOut,
@@ -204,19 +231,32 @@ export class Uniswap {
       poolInfo.tick
     );
 
-    const swapRoute = new Route([pool], tokenIn, tokenOut);
+    const route = new Route([pool], tokenIn, tokenOut);
 
-    const amountOut = await this.getOutputQuote({ route: swapRoute, tokenIn, amountIn });
+    const amountOut = await this.getOutputQuote({ route, tokenIn, atomicAmountIn });
 
-    return Trade.createUncheckedTrade({
-      route: swapRoute,
-      inputAmount: CurrencyAmount.fromRawAmount(
-        tokenIn,
-        fromReadableAmount(Number(amountIn), tokenIn.decimals).toString()
-      ),
-      outputAmount: CurrencyAmount.fromRawAmount(tokenOut, JSBI.BigInt(amountOut)),
-      tradeType: TradeType.EXACT_INPUT
+    return {
+      route,
+      amountOut
+    };
+  }
+
+  private async getOutputQuote({ route, tokenIn, atomicAmountIn }: getOutputQuoteOptions) {
+    const { calldata } = SwapQuoter.quoteCallParameters(
+      route,
+      CurrencyAmount.fromRawAmount(tokenIn, atomicAmountIn),
+      TradeType.EXACT_INPUT,
+      {
+        useQuoterV2: true
+      }
+    );
+
+    const quoteCallReturnData = await this.provider.call({
+      to: QUOTER_CONTRACT_ADDRESS,
+      data: calldata
     });
+
+    return utils.defaultAbiCoder.decode(['uint256'], quoteCallReturnData);
   }
 
   private async getPoolInfo({ tokenIn, tokenOut, poolFee = FeeAmount.MEDIUM }: getPoolInfoOptions): Promise<PoolInfo> {
@@ -247,24 +287,6 @@ export class Uniswap {
       sqrtPriceX96: slot0[0],
       tick: slot0[1]
     };
-  }
-
-  private async getOutputQuote({ route, tokenIn, amountIn }: getOutputQuoteOptions) {
-    const { calldata } = SwapQuoter.quoteCallParameters(
-      route,
-      CurrencyAmount.fromRawAmount(tokenIn, fromReadableAmount(Number(amountIn), tokenIn.decimals)),
-      TradeType.EXACT_INPUT,
-      {
-        useQuoterV2: true
-      }
-    );
-
-    const quoteCallReturnData = await this.provider.call({
-      to: QUOTER_CONTRACT_ADDRESS,
-      data: calldata
-    });
-
-    return utils.defaultAbiCoder.decode(['uint256'], quoteCallReturnData);
   }
 }
 

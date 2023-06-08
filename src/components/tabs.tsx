@@ -50,13 +50,24 @@ export const Tabs: FC<TabsProps> = ({ tabs }) => {
   return (
     <Box
       sx={{
-        width: theme => `calc(100% + ${theme.spacing(6)})`,
-        mx: theme => theme.spacing(-3),
+        // width: theme => `calc(100% + ${theme.spacing(4)})`,
+        // mx: theme => theme.spacing(-2),
         backgroundColor: 'background.paper',
         borderBottom: 1,
-        borderColor: 'divider'
+        borderColor: 'divider',
+        borderTopLeftRadius: theme => theme.spacing(1),
+        borderTopRightRadius: theme => theme.spacing(1)
       }}
     >
+      {/* <Box
+        id="scaffold-tabs-underline"
+        sx={{
+          width: '100%',
+          height: theme => theme.spacing(2),
+          borderTopLeftRadius: 2,
+          borderTopRightRadius: 2
+        }}
+      /> */}
       <MTabs
         sx={{
           width: '100%'

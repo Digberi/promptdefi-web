@@ -1,8 +1,6 @@
 import { createContext, useState } from 'react';
 
-import { operationsInitialState } from './test-state';
-
-import { bundlerClient } from '@/account-abstraction/bandler-client';
+import { bundlerClient } from '@/account-abstraction/bundler-client';
 import { preOpToBatchOp } from '@/core/helpers/pre-op-to-batch-op';
 import { OperationDictionary } from '@/core/operations/operation';
 import { OperationData } from '@/core/operations/operation.type';
@@ -11,18 +9,33 @@ import { PreOpStruct } from '@/types/custom';
 import { CFC } from '@/types/react';
 
 interface OperationsContextProps<T = unknown> {
-  operations?: Array<T>;
-  updateOperation?: (index: number, operation: T) => void;
-  addOperation?: (operation: T) => void;
-  sendOperations?: () => void;
+  operations: Array<T>;
+  updateOperation: (index: number, operation: T) => void;
+  addOperation: (operation: T) => void;
+  sendOperations: () => void;
+  setOperations: (operations: Array<T>) => void;
 }
 
-export const OperationsContext = createContext<OperationsContextProps<OperationData>>({});
+export const OperationsContext = createContext<OperationsContextProps<OperationData>>({
+  operations: [],
+  updateOperation: () => {
+    return;
+  },
+  addOperation: () => {
+    return;
+  },
+  sendOperations: () => {
+    return;
+  },
+  setOperations: () => {
+    return;
+  }
+});
 
 export const OperationsProvider: CFC = ({ children }) => {
-  const [operations, setOperations] = useState<Array<OperationData>>(operationsInitialState);
-  const { smartAccountApi } = useSmartAccount();
-  console.log(operations);
+  const [operations, setOperations] = useState<Array<OperationData>>([]);
+  const { smartAccountApi, smartAccountAddress } = useSmartAccount();
+  console.log({ smartAccountAddress });
 
   const updateOperation = (index: number, operation: OperationData) => {
     setOperations(prevState => {
@@ -57,7 +70,7 @@ export const OperationsProvider: CFC = ({ children }) => {
 
     console.log({ batchOp });
 
-    const unsignedBatchOp = await smartAccountApi.createUnsignedUserBatchOp(batchOp);
+    const unsignedBatchOp = await smartAccountApi.createUnsignedUserBatchOp({ ...batchOp, gasLimit: 1000000 });
 
     console.log({ unsignedBatchOp });
 
@@ -69,11 +82,11 @@ export const OperationsProvider: CFC = ({ children }) => {
 
     console.log({ some });
 
-    setOperations([]);
+    // setOperations([]);
   };
 
   return (
-    <OperationsContext.Provider value={{ operations, updateOperation, addOperation, sendOperations }}>
+    <OperationsContext.Provider value={{ operations, updateOperation, addOperation, sendOperations, setOperations }}>
       {children}
     </OperationsContext.Provider>
   );

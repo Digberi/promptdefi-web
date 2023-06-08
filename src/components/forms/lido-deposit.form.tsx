@@ -43,7 +43,6 @@ export const LidoDepositForm: FC<LidoDepositFormProps> = ({ data, setData }) => 
         p: 2
       }}
     >
-      {' '}
       <ButtonGroup
         sx={{
           gap: 1

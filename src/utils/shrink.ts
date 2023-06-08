@@ -3,5 +3,5 @@ export const shrink = (address: string | undefined) => {
     return '';
   }
 
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  return `${address.slice(0, 8)}...${address.slice(-6)}`;
 };

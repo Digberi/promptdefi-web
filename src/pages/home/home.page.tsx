@@ -1,53 +1,53 @@
-import { Box, Button } from '@mui/material';
-import { useSigner } from 'wagmi';
+import { useState } from 'react';
+
+import { Box } from '@mui/material';
 
 import { useHomeViewModel } from './home.page.vm';
 
 import { Page } from '@/components/base/page';
-import { ConnectButton } from '@/components/connect-button';
-import { FormsGenerator } from '@/components/forms/forms.generator';
+import { OperationScreen } from '@/components/operations-screen';
+import { PromptInput } from '@/components/promt-input';
 import { TabPanel, Tabs, useTab } from '@/components/tabs';
 import { Template } from '@/components/template';
 import { templates } from '@/config/templates';
-import { sendEth } from '@/core/send-eth';
 import { useOperations } from '@/providers/operations';
-import { toAtomic } from '@/utils/units';
 
 const tabs = ['Request', 'Templates'];
 
 export const HomePage = () => {
-  const { /*sendPromt, promtMessage,*/ setPromtMessage } = useHomeViewModel();
-  const { data: signer } = useSigner();
+  const { sendPromt, promtMessage, setPromtMessage } = useHomeViewModel();
+  const { setOperations } = useOperations();
   const { setMainTab } = useTab();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const setTemplate = (message: string) => {
     setPromtMessage(message);
     setMainTab();
   };
 
-  const { operations, updateOperation, sendOperations } = useOperations();
-
-  const handleSend = async () => {
-    if (!signer) {
-      return console.log('no signer');
-    }
-    const result = await sendEth(signer, '0x4C202F3507552B913eB930eF2906789a9210742f', toAtomic('0.02', 18)!);
-    console.log({ result });
+  const onPromtSubmit = () => {
+    sendPromt(promtMessage, operations => {
+      setOperations(operations);
+      setIsOpen(true);
+    });
+    setPromtMessage('');
   };
 
   return (
     <Page
       sx={{
         justifyContent: 'space-between',
-        pb: 3
+        bgcolor: 'background.default',
+        px: 0,
+        pb: 3,
+        position: 'relative',
+        flex: 1,
+        borderRadius: 2
       }}
     >
       <Tabs tabs={tabs} />
       <TabPanel index={0}>
-        <ConnectButton />
-        <Button onClick={handleSend}>Send Eth</Button>
-        {operations && updateOperation && <FormsGenerator listOperations={operations} setOperation={updateOperation} />}
-        <Button onClick={sendOperations}>Send</Button>
+        <PromptInput onSubmit={onPromtSubmit} placeholder={'Enter Your Request'} />
       </TabPanel>
       <TabPanel index={1}>
         <Box sx={{ display: 'grid', gap: 2, mb: 2 }}>
@@ -56,6 +56,8 @@ export const HomePage = () => {
           ))}
         </Box>
       </TabPanel>
+
+      <OperationScreen isOpen={isOpen} setIsOpen={setIsOpen} />
     </Page>
   );
 };

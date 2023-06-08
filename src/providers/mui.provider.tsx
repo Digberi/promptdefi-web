@@ -12,7 +12,7 @@ const pallettes: Record<PaletteMode, PaletteOptions> = {
   light: {
     mode: 'light',
     background: {
-      default: blueGrey[50],
+      default: '#F5F5F5',
       paper: '#fff'
     },
     header: {
@@ -41,7 +41,14 @@ export const MuiProvider: CFC = ({ children }) => {
       createTheme({
         palette: pallettes[mode],
         components: {
-          ...OverrideLinkBehaviorThemeComponents
+          ...OverrideLinkBehaviorThemeComponents,
+          MuiCssBaseline: {
+            styleOverrides: themeParam => ({
+              body: {
+                backgroundColor: themeParam.palette.mode === 'dark' ? 'red' : blueGrey[100]
+              }
+            })
+          }
         }
       }),
     [mode]

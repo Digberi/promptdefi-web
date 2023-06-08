@@ -16,7 +16,7 @@ const FullSizeContainer = styled(Container)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '1fr 2fr 1fr',
   gap: theme.spacing(2),
-  padding: theme.spacing(3)
+  paddingTop: theme.spacing(3)
 }));
 
 const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
@@ -25,7 +25,8 @@ const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
       sx={{
         gridRow: '1 / -1',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        mb: 2
       }}
     >
       <Typography
@@ -53,11 +54,12 @@ export const Desktop = () => {
 
         <DesktopPage title="Magic space">
           <Box
+            id="home-page"
             sx={{
-              bgcolor: 'background.paper',
-              p: 2,
+              bgcolor: 'background.default',
               borderRadius: 2,
-              flexGrow: 1
+              flexGrow: 1,
+              display: 'flex'
             }}
           >
             <HomePage />

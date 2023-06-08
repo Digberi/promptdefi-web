@@ -1,5 +1,5 @@
 export interface Token {
-  address: `0x${string}`;
+  address?: `0x${string}`;
   logoURI: string;
   symbol: string;
   name: string;
@@ -8,11 +8,17 @@ export interface Token {
 
 export const tokens: Array<Token> = [
   {
-    address: '0xeth',
     logoURI: 'https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025',
     decimals: 18,
     symbol: 'ETH',
     name: 'Ethereum'
+  },
+  {
+    address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+    logoURI: 'https://etherscan.io/token/images/weth_28.png',
+    decimals: 18,
+    symbol: 'WETH',
+    name: 'Wrapped Ether'
   },
   {
     address: '0x2E8D98fd126a32362F2Bd8aA427E59a1ec63F780',
@@ -48,6 +54,20 @@ export const tokens: Array<Token> = [
     decimals: 18,
     symbol: 'AAVE',
     name: 'Aave Token'
+  },
+  {
+    name: 'Wrapped BTC',
+    symbol: 'WBTC',
+    decimals: 8,
+    logoURI: 'https://etherscan.io/token/images/wbtc_28.png',
+    address: '0x45AC379F019E48ca5dAC02E54F406F99F5088099'
+  },
+  {
+    name: 'DAI Stablecoin',
+    symbol: 'DAI',
+    decimals: 18,
+    logoURI: 'https://etherscan.io/token/images/MCDDai_32.png',
+    address: '0xBa8DCeD3512925e52FE67b1b5329187589072A55'
   }
 ];
 

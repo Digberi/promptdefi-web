@@ -1,28 +1,55 @@
-import { SmartToy, Wallet } from '@mui/icons-material';
-import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { ContentCopy, LinkOff, SmartToy, Wallet } from '@mui/icons-material';
+import {
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+  styled
+} from '@mui/material';
+import { goerli, useAccount, useBalance, useConnect, useDisconnect } from 'wagmi';
 
+import { Web3AuthConnector } from '@/auth/wagmi';
 import { Page } from '@/components/base/page';
-import { ConnectButton } from '@/components/connect-button';
+import { NetworkAvatar } from '@/components/network-avatar';
 import { Token, tokens } from '@/config/tokens';
 import { useSmartAccount } from '@/hooks/use-smart-account';
+import { CFC } from '@/types/react';
+import { copy } from '@/utils/copy';
 import { shrink } from '@/utils/shrink';
 
-const bgcolor = 'background.paper';
+const Tile = styled(ListItem)(({ theme }) => ({
+  borderRadius: theme.spacing(1),
+  backgroundColor: theme.palette.background.paper
+}));
+
+const SubHeader = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  fontWeight: theme.typography.fontWeightBold,
+  fontSize: theme.typography.pxToRem(14),
+  padding: theme.spacing(1)
+}));
+
+const GridList = styled(List)(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(1)
+}));
 
 const Balance = (token: Token) => {
-  const { address } = useAccount();
+  const { smartAccountAddress } = useSmartAccount();
 
   const { data: tokenInfo } = useBalance({
-    address,
+    address: smartAccountAddress,
     token: token.address
   });
 
   return (
-    <ListItem
+    <Tile
       sx={{
-        borderRadius: 2,
-        bgcolor,
         display: 'grid',
         gridTemplateColumns: 'auto 1fr auto'
       }}
@@ -32,82 +59,161 @@ const Balance = (token: Token) => {
       </ListItemAvatar>
       <ListItemText primary={token.symbol} secondary={token?.name} />
       <ListItemText primary={tokenInfo?.formatted} />
-    </ListItem>
+    </Tile>
+  );
+};
+
+const AddressTile: CFC<{ address?: string; label: string; icon: typeof Wallet }> = ({
+  address,
+  label,
+  icon,
+  children
+}) => {
+  const TileIcon = icon;
+
+  return (
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr auto',
+        gridTemplateRows: 'auto auto',
+        columnGap: 1,
+        flex: 1
+      }}
+    >
+      <Typography
+        sx={{
+          gridColumn: '1 / 3',
+          gridRow: '1 / 2'
+        }}
+        variant="caption"
+        color="text.secondary"
+      >
+        {label}
+      </Typography>
+
+      <Box
+        sx={{
+          gridColumn: '1 / 2',
+          gridRow: '2 / 3',
+          alignSelf: 'center'
+        }}
+      >
+        <TileIcon
+          sx={{
+            color: 'text.secondary'
+          }}
+        />
+      </Box>
+
+      <Typography
+        sx={{
+          gridColumn: '2 / 3',
+          gridRow: '2 / 3'
+        }}
+        variant="body1"
+      >
+        {shrink(address)}
+      </Typography>
+
+      <Box
+        sx={{
+          gridColumn: '3 / 4',
+          gridRow: '1 / 3',
+          display: 'grid',
+          placeItems: 'center'
+        }}
+      >
+        {children}
+      </Box>
+    </Box>
+  );
+};
+
+const WalletTile = () => {
+  const { address, isConnected } = useAccount();
+  const { connect } = useConnect({
+    connector: Web3AuthConnector
+  });
+  const { disconnect } = useDisconnect();
+
+  return (
+    <Tile>
+      {isConnected ? (
+        <AddressTile icon={Wallet} label="Signer Account" address={address}>
+          <IconButton size="small" onClick={() => disconnect()}>
+            <LinkOff
+              sx={{
+                color: 'primary.main'
+              }}
+            />
+          </IconButton>
+        </AddressTile>
+      ) : (
+        <Button
+          sx={{
+            flex: 1,
+            alignSelf: 'center',
+            justifySelf: 'center'
+          }}
+          variant="contained"
+          onClick={() => connect()}
+        >
+          Connect web3
+        </Button>
+      )}
+    </Tile>
+  );
+};
+
+const SmartAccountTile = () => {
+  const { smartAccountAddress } = useSmartAccount();
+
+  return (
+    <Tile>
+      <AddressTile icon={SmartToy} label="Smart Account" address={smartAccountAddress}>
+        <IconButton size="small" onClick={() => copy(smartAccountAddress)}>
+          <ContentCopy
+            sx={{
+              color: 'primary.main'
+            }}
+          />
+        </IconButton>
+      </AddressTile>
+    </Tile>
   );
 };
 
 export const AccountPage = () => {
   const { address, isConnected } = useAccount();
   const { smartAccountAddress } = useSmartAccount();
-  const { chain } = useNetwork();
 
-  console.log({ smartAccountAddress });
+  const isReady = isConnected && address && smartAccountAddress;
 
   return (
     <Page>
-      <ConnectButton />
-
-      <Typography variant="h6">Network</Typography>
-      <ListItem
-        sx={{
-          borderRadius: 2,
-          bgcolor
-        }}
-      >
+      <SubHeader>Network</SubHeader>
+      <Tile>
         <ListItemAvatar>
-          <Avatar>{chain?.name.slice(0, 2).toUpperCase()}</Avatar>
+          <NetworkAvatar />
         </ListItemAvatar>
-        <ListItemText primary={chain?.name} />
-      </ListItem>
+        <ListItemText primary={goerli.name} />
+      </Tile>
 
-      {isConnected && (
-        <>
-          <Typography variant="h6">Accounts</Typography>
-          <List>
-            <ListItem
-              sx={{
-                borderRadius: 2,
-                bgcolor
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar>
-                  <Wallet />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary="Signer Address" secondary={shrink(address)} />
-            </ListItem>
+      <SubHeader>Accounts</SubHeader>
+      <GridList>
+        <WalletTile />
+        {isReady && <SmartAccountTile />}
+      </GridList>
 
-            <ListItem
-              sx={{
-                borderRadius: 2,
-                bgcolor,
-                mt: 3
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar>
-                  <SmartToy />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary="Smart Account" secondary={shrink(smartAccountAddress)} />
-            </ListItem>
-          </List>
-        </>
-      )}
-      {isConnected && (
+      {isReady && (
         <>
-          <Typography variant="h6">Balances</Typography>
-          <List
-            sx={{
-              display: 'grid',
-              gap: 2
-            }}
-          >
+          <SubHeader>Balances</SubHeader>
+          <GridList>
             {tokens.map(token => (
               <Balance key={token.address} {...token} />
             ))}
-          </List>
+          </GridList>
         </>
       )}
     </Page>
