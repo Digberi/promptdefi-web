@@ -7,13 +7,20 @@ import { Chain } from 'wagmi';
 
 import { APP_NAME } from '@/config/constants';
 
+const {
+  VITE_WEB3AUTH_CLIENT_ID: clientId,
+  VITE_WEB3AUTH_CLIENT_VERIFIER_NAME: verifier,
+  VITE_AUTH0_CLIENT_ID: auth0ClientId
+} = import.meta.env;
+
+const WEB3_NETWORK = 'testnet';
+
 export const Web3AuthConnectorInstance = (chains: Chain[]) => {
   // Create Web3Auth Instance
   const name = APP_NAME;
-  console.log({ VITE_WEB3AUTH_CLIENT_ID: import.meta.env.VITE_WEB3AUTH_CLIENT_ID });
 
   const web3AuthInstance = new Web3Auth({
-    clientId: import.meta.env.VITE_WEB3AUTH_CLIENT_ID,
+    clientId,
     chainConfig: {
       chainNamespace: CHAIN_NAMESPACES.EIP155,
       chainId: '0x' + chains[0].id.toString(16),
@@ -23,26 +30,10 @@ export const Web3AuthConnectorInstance = (chains: Chain[]) => {
       ticker: chains[0].nativeCurrency?.symbol
     },
     sessionTime: 86400 * 7,
-    web3AuthNetwork: 'testnet',
+    web3AuthNetwork: WEB3_NETWORK,
     uiConfig: {
       appName: name,
-      theme: 'light',
-      loginMethodsOrder: [
-        'google',
-        'facebook',
-        'twitter',
-        'reddit',
-        'discord',
-        'twitch',
-        'apple',
-        'line',
-        'github',
-        'kakao',
-        'linkedin',
-        'weibo',
-        'wechat',
-        'email_passwordless'
-      ],
+      theme: 'auto',
       defaultLanguage: 'en',
       appLogo: 'https://web3auth.io/images/w3a-L-Favicon-1.svg', // Your App Logo Here
       modalZIndex: '2147483647'
@@ -52,14 +43,21 @@ export const Web3AuthConnectorInstance = (chains: Chain[]) => {
   // Add openlogin adapter for customisations
   const openloginAdapterInstance = new OpenloginAdapter({
     adapterSettings: {
-      network: 'cyan',
+      network: WEB3_NETWORK,
       uxMode: 'popup',
       whiteLabel: {
-        name: 'Your app Name',
+        name,
         logoLight: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         logoDark: 'https://web3auth.io/images/w3a-D-Favicon-1.svg',
         defaultLanguage: 'ua',
         dark: true // whether to enable dark mode. defaultValue: false
+      },
+      loginConfig: {
+        jwt: {
+          verifier,
+          typeOfLogin: 'jwt',
+          clientId: auth0ClientId
+        }
       }
     }
   });
