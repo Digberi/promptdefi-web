@@ -9,13 +9,14 @@ import {
   FormControl,
   FormGroup,
   InputLabel,
-  ListSubheader,
   MenuItem,
   Select,
   SelectChangeEvent,
   TextField,
   Typography
 } from '@mui/material';
+
+import { RelSubHeader } from './list-subheader';
 
 import { tokens } from '@/config/tokens';
 import { AAveV3 } from '@/core/support-operations/aave-v3';
@@ -85,7 +86,7 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
         </ButtonGroup>
 
         <FormGroup>
-          <ListSubheader>Token</ListSubheader>
+          <RelSubHeader>Token</RelSubHeader>
           <FormControl disabled={!isEditing} fullWidth>
             <InputLabel>Select token</InputLabel>
             <Select value={innerData.tokenSymbol} label="Select token" onChange={handleTokenChange}>
@@ -106,7 +107,7 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
             </Select>
           </FormControl>
 
-          <ListSubheader>Amount</ListSubheader>
+          <RelSubHeader>Amount</RelSubHeader>
           <FormControl fullWidth>
             <TextField
               disabled={!isEditing}
@@ -118,7 +119,7 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
         </FormGroup>
 
         <FormGroup>
-          <ListSubheader>Address</ListSubheader>
+          <RelSubHeader>Address</RelSubHeader>
           <FormControl fullWidth>
             <TextField
               disabled={!isEditing}

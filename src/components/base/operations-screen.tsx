@@ -53,7 +53,12 @@ const CustomBackdropFooter = styled(ButtonGroup)(({ theme }) => ({
 }));
 
 export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen }) => {
-  const { operations, updateOperation, sendOperations } = useOperations();
+  const { operations, updateOperation, sendOperations, setOperations } = useOperations();
+
+  const handleCancel = () => {
+    setOperations([]);
+    setIsOpen(false);
+  };
 
   return (
     <CustomBackdrop open={isOpen}>
@@ -72,7 +77,7 @@ export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen })
       </CustomBackdropContent>
 
       <CustomBackdropFooter fullWidth>
-        <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+        <Button onClick={handleCancel}>Cancel</Button>
         <Button variant="contained" onClick={sendOperations}>
           Execute
         </Button>

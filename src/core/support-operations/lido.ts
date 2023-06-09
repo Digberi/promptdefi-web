@@ -1,3 +1,4 @@
+import { AddressZero } from '@account-abstraction/utils';
 import { BigNumberish, utils } from 'ethers';
 
 import lidoAbi from '@/config/abi/lido.abi.json';
@@ -15,7 +16,7 @@ export class Lido {
   static readonly CONTRACT_ADDRESS = LIDO_CONTRACT_ADDRESS;
 
   static createDepositPreOp({ amount }: Lido.CreateDepositPreOpParams): Array<PreOpStruct> {
-    const data = Lido.Interface.encodeFunctionData('submit', ['0']);
+    const data = Lido.Interface.encodeFunctionData('submit', [AddressZero]);
 
     const atomicAmount = utils.parseEther(amount.toString());
 

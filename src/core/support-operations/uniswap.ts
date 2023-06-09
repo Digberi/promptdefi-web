@@ -168,8 +168,11 @@ export class Uniswap {
     const operationsWithTrade = operations.concat(tradePreOp);
 
     if (needWethOut) {
+      const outputAmount = trade.outputAmount.toExact();
+
+      console.log({ outputAmount });
       const wrapEthPreOp = WrapEth.createWithdrawPreOp({
-        amount: trade.outputAmount.toString()
+        amount: outputAmount
       });
 
       operationsWithTrade.push(...wrapEthPreOp);

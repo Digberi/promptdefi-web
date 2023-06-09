@@ -1,6 +1,8 @@
 import { ChangeEventHandler, FC, useState } from 'react';
 
-import { Box, Button, ButtonGroup, Chip, FormControl, FormGroup, ListSubheader, TextField } from '@mui/material';
+import { Box, Button, ButtonGroup, Chip, FormControl, FormGroup, TextField } from '@mui/material';
+
+import { RelSubHeader } from './list-subheader';
 
 import { WrapEth } from '@/core/support-operations/wrap-eth';
 
@@ -49,7 +51,7 @@ export const WrapEthForm: FC<WrapEthFormProps> = ({ data, setData }) => {
         <Chip label="Wrap Ethereum" />
       </ButtonGroup>
       <FormGroup>
-        <ListSubheader>Amount</ListSubheader>
+        <RelSubHeader>Amount</RelSubHeader>
         <FormControl fullWidth>
           <TextField
             disabled={!isEditing}

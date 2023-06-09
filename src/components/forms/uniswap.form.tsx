@@ -65,11 +65,6 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
         const tokenIn = createToken(selectedInToken);
         const tokenOut = createToken(selectedOutToken);
 
-        console.log({
-          tokenIn,
-          tokenOut
-        });
-
         const params = {
           tokenIn,
           tokenOut,
@@ -167,7 +162,6 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
           </Select>
         </FormControl>
 
-        {/* <ListSubheader>Amount</ListSubheader> */}
         <FormControl fullWidth>
           <TextField
             disabled={!isEditing}

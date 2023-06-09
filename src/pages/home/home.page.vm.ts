@@ -97,7 +97,6 @@ export const useHomeViewModel = () => {
     if (!smartAccountAddress) {
       throw new Error('Smart account address is empty');
     }
-    console.log(_message);
 
     const response = await fetch(PROMT_API_URL, {
       method: 'POST',
@@ -117,7 +116,7 @@ export const useHomeViewModel = () => {
     callback(operations);
   };
 
-  const [promtMessage, setPromtMessage] = useState<string>('Swap 100 USDT to ETH');
+  const [promtMessage, setPromtMessage] = useState<string>('Swap 10 USDT to ETH');
 
   return {
     sendPromt,

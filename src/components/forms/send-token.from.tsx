@@ -9,13 +9,14 @@ import {
   FormControl,
   FormGroup,
   InputLabel,
-  ListSubheader,
   MenuItem,
   Select,
   SelectChangeEvent,
   TextField,
   Typography
 } from '@mui/material';
+
+import { RelSubHeader } from './list-subheader';
 
 import { tokens } from '@/config/tokens';
 import { Erc20 } from '@/core/support-operations/erc20-token';
@@ -79,7 +80,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
       </ButtonGroup>
 
       <FormGroup>
-        <ListSubheader>Token</ListSubheader>
+        <RelSubHeader>Token</RelSubHeader>
         <FormControl disabled={!isEditing} fullWidth>
           <InputLabel id="send-token-select-token-label">Select token</InputLabel>
           <Select value={innerData.tokenSymbol} label="Select token" onChange={handleTokenChange}>
@@ -100,7 +101,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
           </Select>
         </FormControl>
 
-        <ListSubheader>Amount</ListSubheader>
+        <RelSubHeader>Amount</RelSubHeader>
         <FormControl fullWidth>
           <TextField
             disabled={!isEditing}
@@ -112,7 +113,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
       </FormGroup>
 
       <FormGroup>
-        <ListSubheader>Address</ListSubheader>
+        <RelSubHeader>Address</RelSubHeader>
         <FormControl fullWidth>
           <TextField
             disabled={!isEditing}

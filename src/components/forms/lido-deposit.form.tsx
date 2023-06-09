@@ -1,6 +1,8 @@
 import { ChangeEventHandler, FC, useState } from 'react';
 
-import { Box, Button, ButtonGroup, Chip, FormControl, FormGroup, ListSubheader, TextField } from '@mui/material';
+import { Box, Button, ButtonGroup, Chip, FormControl, FormGroup, TextField } from '@mui/material';
+
+import { RelSubHeader } from './list-subheader';
 
 import { Lido } from '@/core/support-operations/lido';
 
@@ -48,7 +50,7 @@ export const LidoDepositForm: FC<LidoDepositFormProps> = ({ data, setData }) => 
         <Chip label="Lido deposit" />
       </ButtonGroup>
       <FormGroup>
-        <ListSubheader>Amount</ListSubheader>
+        <RelSubHeader>Amount</RelSubHeader>
         <FormControl fullWidth>
           <TextField
             disabled={!isEditing}
