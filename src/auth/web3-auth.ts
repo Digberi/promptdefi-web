@@ -22,6 +22,8 @@ export const Web3AuthConnectorInstance = (chains: Chain[]) => {
       tickerName: chains[0].nativeCurrency?.name,
       ticker: chains[0].nativeCurrency?.symbol
     },
+    sessionTime: 86400 * 7,
+    web3AuthNetwork: 'testnet',
     uiConfig: {
       appName: name,
       theme: 'light',
