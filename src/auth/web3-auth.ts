@@ -49,7 +49,7 @@ export const Web3AuthConnectorInstance = (chains: Chain[]) => {
         name,
         logoLight: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         logoDark: 'https://web3auth.io/images/w3a-D-Favicon-1.svg',
-        defaultLanguage: 'ua',
+        defaultLanguage: 'en',
         dark: true // whether to enable dark mode. defaultValue: false
       },
       loginConfig: {

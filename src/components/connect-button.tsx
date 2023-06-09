@@ -11,9 +11,7 @@ export const ConnectButton = () => {
   });
   const { disconnect } = useDisconnect();
 
-  const shortAddress = shrink(address); // s
-
-  console.log(address);
+  const shortAddress = shrink(address);
 
   return (
     <div>

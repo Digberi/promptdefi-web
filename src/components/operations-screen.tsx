@@ -54,8 +54,6 @@ const CustomBackdropFooter = styled(ButtonGroup)(({ theme }) => ({
 export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen }) => {
   const { operations, updateOperation, sendOperations } = useOperations();
 
-  console.log({ isOpen });
-
   return (
     <CustomBackdrop open={isOpen}>
       <CustomBackdropHeader>

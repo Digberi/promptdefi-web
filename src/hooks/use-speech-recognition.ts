@@ -23,11 +23,11 @@ const tokenSymbolsGrammar = `
   ${tokens.map(token => token.symbol).join(' | ')} ;
   `;
 
-console.log(tokenSymbolsGrammar);
-
 const speechRecognitionList = new webkitSpeechGrammarList();
 speechRecognitionList.addFromString(grammar, 10);
 speechRecognitionList.addFromString(tokenSymbolsGrammar, 100);
+
+const isSpeechRecognitionSupported = 'webkitSpeechRecognition' in window;
 
 export const useSpeechRecognition = (options?: SpeechRecognitionOptions) => {
   const [isListening, setIsListening] = useState(false);
@@ -36,12 +36,6 @@ export const useSpeechRecognition = (options?: SpeechRecognitionOptions) => {
   const recognition = useRef<SpeechRecognition | null>(null);
 
   const startSpeechRecognition = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      console.log('Speech recognition is not supported in this browser');
-
-      return;
-    }
-
     recognition.current = new webkitSpeechRecognition();
     recognition.current.grammars = speechRecognitionList;
     recognition.current.continuous = false;
@@ -79,5 +73,5 @@ export const useSpeechRecognition = (options?: SpeechRecognitionOptions) => {
     }
   };
 
-  return { isListening, result, startSpeechRecognition, stopSpeechRecognition };
+  return { isListening, result, isSpeechRecognitionSupported, startSpeechRecognition, stopSpeechRecognition };
 };

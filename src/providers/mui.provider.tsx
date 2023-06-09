@@ -49,6 +49,9 @@ export const MuiProvider: CFC = ({ children }) => {
               }
             })
           }
+        },
+        shape: {
+          headerHeight: '4rem'
         }
       }),
     [mode]

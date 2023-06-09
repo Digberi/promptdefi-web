@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 import { ContentCopy, LinkOff, SmartToy, Wallet } from '@mui/icons-material';
 import {
   Avatar,
@@ -39,7 +41,7 @@ const GridList = styled(List)(({ theme }) => ({
   gap: theme.spacing(1)
 }));
 
-const Balance = (token: Token) => {
+const Balance: FC<{ token: Token }> = ({ token }) => {
   const { smartAccountAddress } = useSmartAccount();
 
   const { data: tokenInfo } = useBalance({
@@ -55,10 +57,32 @@ const Balance = (token: Token) => {
       }}
     >
       <ListItemAvatar>
-        <Avatar src={token.logoURI}>{token.symbol.slice(0, 2).toUpperCase()}</Avatar>
+        <Avatar
+          sx={{
+            width: 32,
+            height: 32
+          }}
+          src={token.logoURI}
+        >
+          {token.symbol.slice(0, 2).toUpperCase()}
+        </Avatar>
       </ListItemAvatar>
-      <ListItemText primary={token.symbol} secondary={token?.name} />
-      <ListItemText primary={tokenInfo?.formatted} />
+      <ListItemText
+        primaryTypographyProps={{
+          variant: 'body2'
+        }}
+        secondaryTypographyProps={{
+          variant: 'caption'
+        }}
+        primary={token.symbol}
+        secondary={token?.name}
+      />
+      <ListItemText
+        primaryTypographyProps={{
+          variant: 'body2'
+        }}
+        primary={tokenInfo?.formatted}
+      />
     </Tile>
   );
 };
@@ -211,7 +235,7 @@ export const AccountPage = () => {
           <SubHeader>Balances</SubHeader>
           <GridList>
             {tokens.map(token => (
-              <Balance key={token.address} {...token} />
+              <Balance key={token.address ?? '0'} token={token} />
             ))}
           </GridList>
         </>

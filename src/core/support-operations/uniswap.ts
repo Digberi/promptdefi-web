@@ -148,18 +148,11 @@ export class Uniswap {
       atomicAmountIn
     });
 
-    console.log({
-      amountIn: trade.inputAmount.toFixed(),
-      amountOut: trade.outputAmount.toFixed()
-    });
-
     const tradePreOp = this.createTradePreOp({
       trade,
       tokenIn,
       atomicAmountIn
     });
-
-    console.log(tradePreOp);
 
     return operations.concat(tradePreOp);
   }
@@ -201,10 +194,6 @@ export class Uniswap {
       tokenOut,
       atomicAmountIn,
       poolFee
-    });
-
-    console.log({
-      amountOut: JSBI.BigInt(amountOut).toString()
     });
 
     return Trade.createUncheckedTrade({

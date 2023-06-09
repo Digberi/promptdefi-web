@@ -13,3 +13,9 @@ export declare module '@mui/material/styles' {
     };
   }
 }
+
+export declare module '@mui/system/createTheme/shape' {
+  interface Shape {
+    headerHeight: React.CSSProperties['height'];
+  }
+}

@@ -14,7 +14,8 @@ export const Header = () => {
     <AppBar
       sx={{
         bgcolor: 'header.background',
-        color: 'header.text'
+        color: 'header.text',
+        height: 'shape.headerHeight'
       }}
       position="static"
     >

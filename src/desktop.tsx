@@ -16,7 +16,8 @@ const FullSizeContainer = styled(Container)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '1fr 2fr 1fr',
   gap: theme.spacing(2),
-  paddingTop: theme.spacing(3)
+  paddingTop: theme.spacing(3),
+  maxHeight: `calc(100vh - ${theme.shape.headerHeight})`
 }));
 
 const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
@@ -26,7 +27,8 @@ const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
         gridRow: '1 / -1',
         display: 'flex',
         flexDirection: 'column',
-        mb: 2
+        mb: 2,
+        overflow: 'hidden'
       }}
     >
       <Typography
@@ -38,7 +40,16 @@ const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
       >
         {title}
       </Typography>
-      {children}
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'scroll'
+        }}
+      >
+        {children}
+      </Box>
     </Box>
   );
 };

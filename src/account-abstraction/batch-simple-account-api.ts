@@ -1,4 +1,4 @@
-import { EntryPoint, UserOperationStruct } from '@account-abstraction/contracts';
+import { UserOperationStruct } from '@account-abstraction/contracts';
 import { SimpleAccountAPI } from '@account-abstraction/sdk';
 import { TransactionDetailsForUserOp } from '@account-abstraction/sdk/dist/src/TransactionDetailsForUserOp';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
@@ -124,26 +124,5 @@ export class BatchAccountAPI extends SimpleAccountAPI {
     const I = new utils.Interface(['function executeBatch(address[] target, uint256[] value, bytes[] data) external']);
 
     return I.encodeFunctionData('executeBatch', [target, value, data]);
-  }
-
-  async getNonce(): Promise<BigNumber> {
-    if (await this.checkAccountPhantom()) {
-      return BigNumber.from(0);
-    }
-
-    //@ts-ignore
-    const entryPoint = this.entryPointView as EntryPoint;
-
-    const accountAddress = await this.getAccountAddress();
-
-    console.log({ accountAddress });
-
-    const nonce = await entryPoint.getNonce(accountAddress, '0');
-
-    console.log({ nonce });
-
-    return nonce;
-
-    return await super.getNonce();
   }
 }
