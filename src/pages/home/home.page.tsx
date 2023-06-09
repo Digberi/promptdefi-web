@@ -63,7 +63,12 @@ export const HomePage = () => {
       <TabPanel index={0}>
         <Box sx={{ display: 'grid', gap: 2, gridTemplateRows: '1fr auto', flex: 1 }}>
           <HomePlaceholder />
-          <PromptInput promt={promtMessage} onSubmit={onPromtSubmit} placeholder={'Enter Your Request'} />
+          <PromptInput
+            promt={promtMessage}
+            setPromtMessage={setPromtMessage}
+            onSubmit={onPromtSubmit}
+            placeholder={'Enter Your Request'}
+          />
         </Box>
       </TabPanel>
       <TabPanel index={1}>

@@ -34,8 +34,7 @@ export const OperationsContext = createContext<OperationsContextProps<OperationD
 
 export const OperationsProvider: CFC = ({ children }) => {
   const [operations, setOperations] = useState<Array<OperationData>>([]);
-  const { smartAccountApi, smartAccountAddress } = useSmartAccount();
-  console.log({ smartAccountAddress });
+  const { smartAccountApi } = useSmartAccount();
 
   const updateOperation = (index: number, operation: OperationData) => {
     setOperations(prevState => {

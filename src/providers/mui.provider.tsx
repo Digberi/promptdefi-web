@@ -15,6 +15,7 @@ const pallettes: Record<PaletteMode, PaletteOptions> = {
       default: '#F5F5F5',
       paper: '#fff'
     },
+    primary: indigo,
     header: {
       background: indigo[500],
       text: '#fff'
@@ -26,8 +27,9 @@ const pallettes: Record<PaletteMode, PaletteOptions> = {
       default: '#121212',
       paper: '#1e1e1e'
     },
+    primary: indigo,
     header: {
-      background: indigo[500],
+      background: indigo[900],
       text: '#fff'
     }
   }
@@ -45,7 +47,7 @@ export const MuiProvider: CFC = ({ children }) => {
           MuiCssBaseline: {
             styleOverrides: themeParam => ({
               body: {
-                backgroundColor: themeParam.palette.mode === 'dark' ? 'red' : blueGrey[100]
+                backgroundColor: themeParam.palette.mode === 'dark' ? blueGrey[900] : blueGrey[100]
               }
             })
           }

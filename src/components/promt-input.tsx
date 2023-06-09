@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback } from 'react';
 
 import { Box, Button, TextareaAutosize, styled } from '@mui/material';
 
@@ -7,6 +7,7 @@ import { SpeechRecognitionCustomResult } from '@/hooks/use-speech-recognition';
 
 interface PromptInputProps {
   onSubmit: () => void;
+  setPromtMessage: (message: string) => void;
   placeholder: string;
   promt?: string;
 }
@@ -22,22 +23,15 @@ const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
   outline: 'none'
 }));
 
-export const PromptInput: FC<PromptInputProps> = ({ onSubmit, placeholder, promt }) => {
-  const [value, setValue] = useState('');
-
-  useEffect(() => {
-    if (!promt) {
-      return;
-    }
-
-    setValue(promt);
-  }, [promt]);
-
-  const onRecognitionResult = useCallback((result: SpeechRecognitionCustomResult) => {
-    if (result.confidence > 0.6) {
-      setValue(result.transcript);
-    }
-  }, []);
+export const PromptInput: FC<PromptInputProps> = ({ onSubmit, placeholder, promt, setPromtMessage }) => {
+  const onRecognitionResult = useCallback(
+    (result: SpeechRecognitionCustomResult) => {
+      if (result.confidence > 0.6) {
+        setPromtMessage(result.transcript);
+      }
+    },
+    [setPromtMessage]
+  );
 
   return (
     <Box
@@ -59,9 +53,9 @@ export const PromptInput: FC<PromptInputProps> = ({ onSubmit, placeholder, promt
         }}
       >
         <StyledTextareaAutosize
-          value={value}
+          value={promt}
           onChange={e => {
-            setValue(e.target.value || '');
+            setPromtMessage(e.target.value || '');
           }}
           placeholder={placeholder}
         />

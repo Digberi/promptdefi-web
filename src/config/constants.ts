@@ -1,6 +1,7 @@
 export const APP_NAME = 'Promt DeFi';
 
 export const BUNDLER_URL = 'http://64.227.119.238:3000/rpc';
+export const PROMT_API_URL = 'http://64.227.119.238:3000/parse-prompt';
 
 export const MAX_FEE_PER_GAS = 100000000000;
 export const MAX_PRIORITY_FEE_PER_GAS = 100000000000;
