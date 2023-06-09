@@ -5,12 +5,15 @@ import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector';
 import { Chain } from 'wagmi';
 
+import { APP_NAME } from '@/config/constants';
+
 export const Web3AuthConnectorInstance = (chains: Chain[]) => {
   // Create Web3Auth Instance
-  const name = 'My App Name';
+  const name = APP_NAME;
+  console.log({ VITE_WEB3AUTH_CLIENT_ID: import.meta.env.VITE_WEB3AUTH_CLIENT_ID });
 
   const web3AuthInstance = new Web3Auth({
-    clientId: 'YOUR_CLIENT_ID',
+    clientId: import.meta.env.VITE_WEB3AUTH_CLIENT_ID,
     chainConfig: {
       chainNamespace: CHAIN_NAMESPACES.EIP155,
       chainId: '0x' + chains[0].id.toString(16),

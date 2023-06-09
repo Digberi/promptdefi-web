@@ -18,7 +18,15 @@ export const InfoPanel = () => {
           }}
         />
       </IconButton>
-      <SwipeableDrawer anchor={anchor} open={isOpen} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+      <SwipeableDrawer
+        sx={{
+          zIndex: theme => theme.zIndex.drawer + 2
+        }}
+        anchor={anchor}
+        open={isOpen}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+      >
         <Box sx={{ width: '100vw' }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
           <FeaturesInfo />
         </Box>

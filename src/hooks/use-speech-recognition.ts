@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react';
 
+import { tokens } from '@/config/tokens';
+
 export type SpeechRecognitionCustomResult = {
   transcript: string;
   confidence: number;
@@ -8,6 +10,24 @@ export type SpeechRecognitionCustomResult = {
 type SpeechRecognitionOptions = {
   lang?: string;
 };
+
+const grammar = `
+  #JSGF V1.0; grammar cryptoDefi; public <term> =
+    bitcoin | ethereum | ripple | litecoin | dogecoin |
+    blockchain | smart contract | decentralized finance | yield farming |
+    liquidity pool | stablecoin | decentralized exchange ;
+`;
+
+const tokenSymbolsGrammar = `
+  #JSGF V1.0; grammar tokenSymbols; public <term> =
+  ${tokens.map(token => token.symbol).join(' | ')} ;
+  `;
+
+console.log(tokenSymbolsGrammar);
+
+const speechRecognitionList = new webkitSpeechGrammarList();
+speechRecognitionList.addFromString(grammar, 10);
+speechRecognitionList.addFromString(tokenSymbolsGrammar, 100);
 
 export const useSpeechRecognition = (options?: SpeechRecognitionOptions) => {
   const [isListening, setIsListening] = useState(false);
@@ -23,7 +43,7 @@ export const useSpeechRecognition = (options?: SpeechRecognitionOptions) => {
     }
 
     recognition.current = new webkitSpeechRecognition();
-
+    recognition.current.grammars = speechRecognitionList;
     recognition.current.continuous = false;
     recognition.current.interimResults = false;
     recognition.current.lang = options?.lang || 'en-US';
