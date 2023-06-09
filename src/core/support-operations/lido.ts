@@ -6,7 +6,7 @@ import { PreOpStruct } from '@/types/custom';
 
 export namespace Lido {
   export interface CreateDepositPreOpParams {
-    atomicAmount: BigNumberish;
+    amount: BigNumberish;
   }
 }
 
@@ -14,8 +14,10 @@ export class Lido {
   static readonly Interface = new utils.Interface(lidoAbi);
   static readonly CONTRACT_ADDRESS = LIDO_CONTRACT_ADDRESS;
 
-  static createDepositPreOp({ atomicAmount }: Lido.CreateDepositPreOpParams): Array<PreOpStruct> {
+  static createDepositPreOp({ amount }: Lido.CreateDepositPreOpParams): Array<PreOpStruct> {
     const data = Lido.Interface.encodeFunctionData('submit', ['0']);
+
+    const atomicAmount = utils.parseEther(amount.toString());
 
     return [
       {

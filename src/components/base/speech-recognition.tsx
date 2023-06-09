@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react';
 import { Mic } from '@mui/icons-material';
 import { Box, IconButton } from '@mui/material';
 
-import { SpeechRecognitionCustomResult, useSpeechRecognition } from '../hooks/use-speech-recognition';
+import { SpeechRecognitionCustomResult, useSpeechRecognition } from '@/hooks/use-speech-recognition';
 
 interface MicroSpeechRecognitionProps {
   onRecognitionResult: (result: SpeechRecognitionCustomResult) => void;

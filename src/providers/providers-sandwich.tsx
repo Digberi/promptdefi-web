@@ -6,7 +6,7 @@ import { OperationsProvider } from './operations/operations.provider';
 import { SmartAccountProvider } from './smart-account.provider';
 import { WagmiProvider } from './wagmi.provider';
 
-import { TabProvider } from '@/components/tabs';
+import { TabProvider } from '@/components/base/tabs';
 import { CFC } from '@/types/react';
 
 export const ProvidersSandwich: CFC = ({ children }) => {

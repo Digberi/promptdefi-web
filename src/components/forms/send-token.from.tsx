@@ -19,7 +19,6 @@ import {
 
 import { tokens } from '@/config/tokens';
 import { Erc20 } from '@/core/support-operations/erc20-token';
-import { toAtomic, toReal } from '@/utils/units';
 
 type SendTokenParams = Erc20.CreateSendPreOpParams;
 
@@ -41,8 +40,6 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
     setData(innerData);
   };
 
-  const selectedToken = tokens.find(token => token.address === innerData.tokenAddress)!;
-
   const handleTokenChange = ({ target }: SelectChangeEvent) => {
     setInnerData(prev => ({
       ...prev,
@@ -53,7 +50,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
   const handleAmountChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
     setInnerData(prev => ({
       ...prev,
-      atomicAmount: toAtomic(target.value, selectedToken.decimals) ?? ''
+      amount: target.value
     }));
   };
 
@@ -85,9 +82,9 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
         <ListSubheader>Token</ListSubheader>
         <FormControl disabled={!isEditing} fullWidth>
           <InputLabel id="send-token-select-token-label">Select token</InputLabel>
-          <Select value={innerData.tokenAddress} label="Select token" onChange={handleTokenChange}>
+          <Select value={innerData.tokenSymbol} label="Select token" onChange={handleTokenChange}>
             {tokens.map((_token, index) => (
-              <MenuItem key={index} value={_token.address}>
+              <MenuItem key={index} value={_token.symbol}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -108,7 +105,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
           <TextField
             disabled={!isEditing}
             placeholder="Amount"
-            value={toReal(innerData.atomicAmount, selectedToken?.decimals)}
+            value={innerData.amount}
             onChange={handleAmountChange}
           />
         </FormControl>

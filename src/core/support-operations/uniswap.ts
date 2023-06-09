@@ -22,6 +22,7 @@ import { MAX_FEE_PER_GAS, MAX_PRIORITY_FEE_PER_GAS } from '@/config/constants';
 import { POOL_FACTORY_CONTRACT_ADDRESS, QUOTER_CONTRACT_ADDRESS, SWAP_ROUTER_ADDRESS } from '@/config/contracts';
 import { Token as IToken, tokens } from '@/config/tokens';
 import { PreOpStruct } from '@/types/custom';
+import { toAtomic } from '@/utils/units';
 
 //#region Types
 type TokenTrade = Trade<Token, Token, TradeType>;
@@ -69,8 +70,8 @@ interface executeTradeOptions {
 }
 
 interface swapOptions {
-  tokenIn?: IToken;
-  tokenOut?: IToken;
+  tokenIn: IToken;
+  tokenOut: IToken;
   atomicAmountIn: string;
 }
 //#endregion Types
@@ -79,11 +80,11 @@ export namespace Uniswap {
   export interface CreateSwapPreOpParams {
     tokenSymbolIn?: string;
     tokenSymbolOut?: string;
-    atomicAmount: string;
+    amount: string;
   }
 }
 
-export const createToken = (token?: IToken) => {
+export const createToken = (token: IToken) => {
   if (token && token.address) {
     return new Token(goerli.id, token.address, token.decimals, token.symbol, token.name);
   } else {
@@ -93,17 +94,18 @@ export const createToken = (token?: IToken) => {
   }
 };
 
-const prePareTokenPair = ({ tokenA, tokenB }: { tokenA?: IToken; tokenB?: IToken }) => {
+const prePareTokenPair = ({ tokenA, tokenB }: { tokenA: IToken; tokenB: IToken }) => {
   if (!tokenA && !tokenB) {
     throw new Error('No token pair provided');
   }
 
+  const needWethIn = !tokenA.address;
+  const needWethOut = !tokenB.address;
+
   const tokenIn = createToken(tokenA);
   const tokenOut = createToken(tokenB);
 
-  const needWeth = !tokenA;
-
-  return { tokenIn, tokenOut, needWeth };
+  return { tokenIn, tokenOut, needWethIn, needWethOut };
 };
 
 export class Uniswap {
@@ -113,13 +115,23 @@ export class Uniswap {
     Uniswap.instance = new Uniswap(provider, walletAddress);
   }
 
-  static async createSwapPreOp({ tokenSymbolIn, tokenSymbolOut, atomicAmount }: Uniswap.CreateSwapPreOpParams) {
+  static async createSwapPreOp({ tokenSymbolIn, tokenSymbolOut, amount }: Uniswap.CreateSwapPreOpParams) {
     if (!Uniswap.instance) {
       throw new Error('Uniswap instance not initialized');
     }
 
     const tokenIn = tokens.find(token => token.symbol === tokenSymbolIn);
     const tokenOut = tokens.find(token => token.symbol === tokenSymbolOut);
+
+    if (!tokenIn) {
+      throw new Error(`Token ${tokenSymbolIn} not found`);
+    }
+
+    if (!tokenOut) {
+      throw new Error(`Token ${tokenSymbolOut} not found`);
+    }
+
+    const atomicAmount = toAtomic(amount, tokenIn.decimals).toString();
 
     return await Uniswap.instance.createSwapPreOp({
       tokenIn,
@@ -130,13 +142,13 @@ export class Uniswap {
 
   constructor(private readonly provider: providers.Provider, private readonly walletAddress: string) {}
 
-  async createSwapPreOp({ tokenIn: tokenA, tokenOut: tokenB, atomicAmountIn }: swapOptions) {
-    const { tokenIn, tokenOut, needWeth } = prePareTokenPair({ tokenA, tokenB });
+  private async createSwapPreOp({ tokenIn: tokenA, tokenOut: tokenB, atomicAmountIn }: swapOptions) {
+    const { tokenIn, tokenOut, needWethIn, needWethOut } = prePareTokenPair({ tokenA, tokenB });
     const operations: Array<PreOpStruct> = [];
 
-    if (needWeth) {
+    if (needWethIn) {
       const wrapEthPreOp = WrapEth.createDepositPreOp({
-        atomicAmount: atomicAmountIn
+        amount: utils.parseEther(atomicAmountIn)
       });
 
       operations.push(...wrapEthPreOp);
@@ -153,8 +165,17 @@ export class Uniswap {
       tokenIn,
       atomicAmountIn
     });
+    const operationsWithTrade = operations.concat(tradePreOp);
 
-    return operations.concat(tradePreOp);
+    if (needWethOut) {
+      const wrapEthPreOp = WrapEth.createWithdrawPreOp({
+        amount: trade.outputAmount.toString()
+      });
+
+      operationsWithTrade.push(...wrapEthPreOp);
+    }
+
+    return operationsWithTrade;
   }
 
   private createTradePreOp({ trade, tokenIn, atomicAmountIn }: executeTradeOptions): Array<PreOpStruct> {

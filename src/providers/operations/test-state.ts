@@ -1,5 +1,5 @@
 import { OperationData } from '@/core/operations/operation.type';
-import { Operation } from '@/core/operations/operations.enum';
+// import { Operation } from '@/core/operations/operations.enum';
 
 export const operationsInitialState: Array<OperationData> = [
   // {
@@ -8,37 +8,36 @@ export const operationsInitialState: Array<OperationData> = [
   //     atomicAmount: '10000000000000'
   //   }
   // },
-  {
-    kind: Operation.UniswapSwap,
-    data: {
-      tokenSymbolIn: 'LINK',
-      tokenSymbolOut: 'USDT',
-      atomicAmount: '2000000000000000000'
-    }
-  },
-  {
-    kind: Operation.UniswapSwap,
-    data: {
-      tokenSymbolIn: 'USDT',
-      tokenSymbolOut: 'USDC',
-      atomicAmount: '10050000000000'
-    }
-  },
-  {
-    kind: Operation.UniswapSwap,
-    data: {
-      tokenSymbolIn: 'USDC',
-      tokenSymbolOut: 'AAVE',
-      atomicAmount: '10050000000000'
-    }
-  }
+  // {
+  //   kind: Operation.SwapTokens,
+  //   data: {
+  //     tokenSymbolIn: 'LINK',
+  //     tokenSymbolOut: 'USDT',
+  //     atomicAmount: '2000000000000000000'
+  //   }
+  // },
+  // {
+  //   kind: Operation.SwapTokens,
+  //   data: {
+  //     tokenSymbolIn: 'USDT',
+  //     tokenSymbolOut: 'USDC',
+  //     atomicAmount: '10050000000000'
+  //   }
+  // },
+  // {
+  //   kind: Operation.SwapTokens,
+  //   data: {
+  //     tokenSymbolIn: 'USDC',
+  //     tokenSymbolOut: 'AAVE',
+  //     atomicAmount: '10050000000000'
+  //   }
+  // }
   // {
   //   kind: Operation.LidoDeposit,
   //   data: {
   //     atomicAmount: '1000000000000000000'
   //   }
   // },
-
   // {
   //   kind: Operation.SendToken,
   //   data: {

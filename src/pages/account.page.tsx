@@ -17,7 +17,7 @@ import { goerli, useAccount, useBalance, useConnect, useDisconnect } from 'wagmi
 
 import { Web3AuthConnector } from '@/auth/wagmi';
 import { Page } from '@/components/base/page';
-import { NetworkAvatar } from '@/components/network-avatar';
+import { NetworkAvatar } from '@/components/ui/network-avatar';
 import { Token, tokens } from '@/config/tokens';
 import { useSmartAccount } from '@/hooks/use-smart-account';
 import { CFC } from '@/types/react';

@@ -4,12 +4,12 @@ import { Box, Typography, styled } from '@mui/material';
 
 import { useHomeViewModel } from './home.page.vm';
 
+import { OperationScreen } from '@/components/base/operations-screen';
 import { Page } from '@/components/base/page';
-import { OperationScreen } from '@/components/operations-screen';
-import { PromptInput } from '@/components/promt-input';
+import { PromptInput } from '@/components/base/promt-input';
+import { TabPanel, Tabs, useTab } from '@/components/base/tabs';
 import { Hand } from '@/components/svg/hand';
-import { TabPanel, Tabs, useTab } from '@/components/tabs';
-import { Template } from '@/components/template';
+import { Template } from '@/components/ui/template';
 import { templates } from '@/config/templates';
 import { useOperations } from '@/providers/operations';
 

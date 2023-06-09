@@ -62,11 +62,18 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
         if (!uniswap) {
           return;
         }
+        const tokenIn = createToken(selectedInToken);
+        const tokenOut = createToken(selectedOutToken);
+
+        console.log({
+          tokenIn,
+          tokenOut
+        });
 
         const params = {
-          tokenIn: createToken(selectedInToken),
-          tokenOut: createToken(selectedOutToken),
-          atomicAmountIn: innerData.atomicAmount
+          tokenIn,
+          tokenOut,
+          atomicAmountIn: toAtomic(innerData.amount, selectedInToken.decimals).toString()
         };
 
         const { amountOut } = await uniswap.getRouteAndQuote(params);
@@ -78,7 +85,7 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
     };
 
     void getOutputAmount();
-  }, [selectedInToken, selectedOutToken, innerData.atomicAmount, uniswap]);
+  }, [selectedInToken, selectedOutToken, innerData.amount, uniswap]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -107,7 +114,7 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
     try {
       setInnerData(prev => ({
         ...prev,
-        atomicAmount: toAtomic(target.value, selectedInToken.decimals).toString() ?? ''
+        amount: target.value
       }));
     } catch (error) {
       console.log(error);
@@ -165,7 +172,7 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
           <TextField
             disabled={!isEditing}
             placeholder="Amount"
-            value={toReal(innerData.atomicAmount, selectedInToken.decimals)}
+            value={innerData.amount}
             onChange={handleAmountChange}
           />
         </FormControl>
@@ -198,7 +205,6 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
           </Select>
         </FormControl>
 
-        {/* <ListSubheader>Output Amount</ListSubheader> */}
         <FormControl fullWidth>
           <TextField disabled placeholder="Output Amount" value={toReal(outputAmount, selectedOutToken.decimals)} />
         </FormControl>

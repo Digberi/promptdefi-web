@@ -13,5 +13,5 @@ export const OperationDictionary = {
   [Operation.AaveBorrow]: AAveV3.createBorrowPreOp,
   [Operation.AaveRepay]: AAveV3.createRepayPreOp,
   [Operation.AaveWithdraw]: AAveV3.createWithdrawPreOp,
-  [Operation.UniswapSwap]: Uniswap.createSwapPreOp
+  [Operation.SwapTokens]: Uniswap.createSwapPreOp
 } as const;

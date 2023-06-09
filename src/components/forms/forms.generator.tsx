@@ -24,7 +24,7 @@ const FormsDictionary = {
   [Operation.AaveDeposit]: createAaveV3Form('Aave deposit'),
   [Operation.AaveWithdraw]: createAaveV3Form('Aave withdraw'),
   [Operation.AaveRepay]: createAaveV3Form('Aave repay'),
-  [Operation.UniswapSwap]: UniswapForm
+  [Operation.SwapTokens]: UniswapForm
 } as const;
 
 export const FormsGenerator: FC<FormGeneratorProps> = ({ listOperations, setOperation }) => {

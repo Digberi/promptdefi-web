@@ -4,33 +4,52 @@ import { Erc20 } from './erc20-token';
 
 import { aaveV3PoolABI } from '@/config/abi';
 import { AAVE_V3_POOL_CONTRACT_ADDRESS } from '@/config/contracts';
+import { tokens } from '@/config/tokens';
 import { PreOpStruct } from '@/types/custom';
+import { toAtomic } from '@/utils/units';
 
 export namespace AAveV3 {
   export interface CreateBorrowPreOpParams {
-    tokenAddress: string;
-    atomicAmount: BigNumberish;
+    tokenSymbol: string;
+    amount: BigNumberish;
     receiver: string;
   }
 
   export interface CreateRepayPreOpParams {
-    tokenAddress: string;
-    atomicAmount: BigNumberish;
+    tokenSymbol: string;
+    amount: BigNumberish;
     receiver: string;
   }
 
   export interface CreateDepositPreOpParams {
-    tokenAddress: string;
-    atomicAmount: BigNumberish;
+    tokenSymbol: string;
+    amount: BigNumberish;
     receiver: string;
   }
 
   export interface CreateWithdrawPreOpParams {
-    tokenAddress: string;
-    atomicAmount: BigNumberish;
+    tokenSymbol: string;
+    amount: BigNumberish;
     receiver: string;
   }
 }
+
+const getTokenByTokenSymbol = (tokenSymbol: string) => {
+  const token = tokens.find(({ symbol }) => symbol === tokenSymbol);
+  if (!token) {
+    throw new Error(`Token ${tokenSymbol} not found`);
+  }
+
+  return token;
+};
+
+const getData = (tokenSymbol: string, amount: BigNumberish) => {
+  const token = getTokenByTokenSymbol(tokenSymbol);
+  const atomicAmount = toAtomic(amount, token.decimals).toString();
+  const tokenAddress = token.address!;
+
+  return { atomicAmount, tokenAddress };
+};
 
 export class AAveV3 {
   static readonly Interface = new utils.Interface(aaveV3PoolABI);
@@ -38,11 +57,9 @@ export class AAveV3 {
   static readonly INTEREST_RATE_MODE = 2; // Variable
   static readonly CONTRACT_ADDRESS = AAVE_V3_POOL_CONTRACT_ADDRESS;
 
-  static createBorrowPreOp({
-    tokenAddress,
-    atomicAmount,
-    receiver
-  }: AAveV3.CreateBorrowPreOpParams): Array<PreOpStruct> {
+  static createBorrowPreOp({ tokenSymbol, amount, receiver }: AAveV3.CreateBorrowPreOpParams): Array<PreOpStruct> {
+    const { atomicAmount, tokenAddress } = getData(tokenSymbol, amount);
+
     const borrowData = AAveV3.Interface.encodeFunctionData('borrow', [
       tokenAddress,
       atomicAmount,
@@ -60,7 +77,9 @@ export class AAveV3 {
     ];
   }
 
-  static createRepayPreOp({ tokenAddress, atomicAmount, receiver }: AAveV3.CreateRepayPreOpParams): Array<PreOpStruct> {
+  static createRepayPreOp({ tokenSymbol, amount, receiver }: AAveV3.CreateRepayPreOpParams): Array<PreOpStruct> {
+    const { atomicAmount, tokenAddress } = getData(tokenSymbol, amount);
+
     const approvePreOp = Erc20.createApprovePreOp({
       tokenAddress,
       atomicAmount,
@@ -83,11 +102,9 @@ export class AAveV3 {
     return approvePreOp.concat(repayPreOp);
   }
 
-  static createDepositPreOp({
-    tokenAddress,
-    atomicAmount,
-    receiver
-  }: AAveV3.CreateDepositPreOpParams): Array<PreOpStruct> {
+  static createDepositPreOp({ tokenSymbol, amount, receiver }: AAveV3.CreateDepositPreOpParams): Array<PreOpStruct> {
+    const { atomicAmount, tokenAddress } = getData(tokenSymbol, amount);
+
     const approvePreOp = Erc20.createApprovePreOp({
       tokenAddress,
       atomicAmount,
@@ -110,11 +127,8 @@ export class AAveV3 {
     return approvePreOp.concat(depositPreOp);
   }
 
-  static createWithdrawPreOp({
-    tokenAddress,
-    atomicAmount,
-    receiver
-  }: AAveV3.CreateWithdrawPreOpParams): Array<PreOpStruct> {
+  static createWithdrawPreOp({ tokenSymbol, amount, receiver }: AAveV3.CreateWithdrawPreOpParams): Array<PreOpStruct> {
+    const { atomicAmount, tokenAddress } = getData(tokenSymbol, amount);
     const withdrawData = AAveV3.Interface.encodeFunctionData('withdraw', [tokenAddress, atomicAmount, receiver]);
 
     return [

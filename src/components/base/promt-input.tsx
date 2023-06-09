@@ -2,7 +2,7 @@ import { FC, useCallback } from 'react';
 
 import { Box, Button, TextareaAutosize, styled } from '@mui/material';
 
-import { MicroSpeechRecognition } from '@/components/speech-recognition';
+import { MicroSpeechRecognition } from '@/components/base/speech-recognition';
 import { SpeechRecognitionCustomResult } from '@/hooks/use-speech-recognition';
 
 interface PromptInputProps {

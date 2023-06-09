@@ -2,12 +2,14 @@ import { BigNumberish } from 'ethers';
 import { Interface } from 'ethers/lib/utils.js';
 
 import { erc20ABI } from '@/config/abi';
+import { tokens } from '@/config/tokens';
 import { PreOpStruct } from '@/types/custom';
+import { toAtomic } from '@/utils/units';
 
 export namespace Erc20 {
   export interface CreateSendPreOpParams {
-    tokenAddress: string;
-    atomicAmount: BigNumberish;
+    tokenSymbol: string;
+    amount: BigNumberish;
     receiver: string;
   }
 
@@ -18,15 +20,26 @@ export namespace Erc20 {
   }
 }
 
+const getTokenByTokenSymbol = (tokenSymbol: string) => {
+  const token = tokens.find(({ symbol }) => symbol === tokenSymbol);
+  if (!token) {
+    throw new Error(`Token ${tokenSymbol} not found`);
+  }
+
+  return token;
+};
 export class Erc20 {
   static readonly Interface = new Interface(erc20ABI);
 
-  static createSendPreOp({ tokenAddress, atomicAmount, receiver }: Erc20.CreateSendPreOpParams): Array<PreOpStruct> {
+  static createSendPreOp({ tokenSymbol, amount, receiver }: Erc20.CreateSendPreOpParams): Array<PreOpStruct> {
+    const token = getTokenByTokenSymbol(tokenSymbol);
+    const atomicAmount = toAtomic(amount, token.decimals).toString();
+
     const data = Erc20.Interface.encodeFunctionData('transfer', [receiver, atomicAmount]);
 
     return [
       {
-        target: tokenAddress,
+        target: token.address!,
         value: 0,
         data
       }

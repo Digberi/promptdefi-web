@@ -19,7 +19,6 @@ import {
 
 import { tokens } from '@/config/tokens';
 import { AAveV3 } from '@/core/support-operations/aave-v3';
-import { toAtomic, toReal } from '@/utils/units';
 
 type AAveV3Params =
   | AAveV3.CreateBorrowPreOpParams
@@ -47,19 +46,17 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
       setData(innerData);
     };
 
-    const selectedToken = tokens.find(token => token.address === innerData.tokenAddress)!;
-
     const handleTokenChange = ({ target }: SelectChangeEvent) => {
       setInnerData(prev => ({
         ...prev,
-        tokenAddress: target.value
+        tokenSymbol: target.value
       }));
     };
 
     const handleAmountChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
       setInnerData(prev => ({
         ...prev,
-        atomicAmount: toAtomic(target.value, selectedToken.decimals) ?? ''
+        amount: target.value
       }));
     };
 
@@ -91,9 +88,9 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
           <ListSubheader>Token</ListSubheader>
           <FormControl disabled={!isEditing} fullWidth>
             <InputLabel>Select token</InputLabel>
-            <Select value={innerData.tokenAddress} label="Select token" onChange={handleTokenChange}>
+            <Select value={innerData.tokenSymbol} label="Select token" onChange={handleTokenChange}>
               {tokens.map((_token, index) => (
-                <MenuItem key={index} value={_token.address}>
+                <MenuItem key={index} value={_token.symbol}>
                   <Box
                     sx={{
                       display: 'flex',
@@ -114,7 +111,7 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
             <TextField
               disabled={!isEditing}
               placeholder="Amount"
-              value={toReal(innerData.atomicAmount, selectedToken?.decimals)}
+              value={innerData.amount}
               onChange={handleAmountChange}
             />
           </FormControl>

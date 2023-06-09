@@ -3,7 +3,6 @@ import { ChangeEventHandler, FC, useState } from 'react';
 import { Box, Button, ButtonGroup, Chip, FormControl, FormGroup, ListSubheader, TextField } from '@mui/material';
 
 import { WrapEth } from '@/core/support-operations/wrap-eth';
-import { toAtomic, toReal } from '@/utils/units';
 
 type WrapEthProps = WrapEth.CreateDepositPreOpParams;
 
@@ -11,8 +10,6 @@ interface WrapEthFormProps {
   data: WrapEthProps;
   setData: (data: WrapEthProps) => void;
 }
-
-const ETH_DECIMALS = 18;
 
 export const WrapEthForm: FC<WrapEthFormProps> = ({ data, setData }) => {
   const [innerData, setInnerData] = useState<WrapEthProps>(data);
@@ -30,8 +27,7 @@ export const WrapEthForm: FC<WrapEthFormProps> = ({ data, setData }) => {
   const handleAmountChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
     setInnerData(prev => ({
       ...prev,
-      //TODO: fix decimals
-      atomicAmount: toAtomic(target.value, ETH_DECIMALS) ?? ''
+      amount: target.value
     }));
   };
 
@@ -58,7 +54,7 @@ export const WrapEthForm: FC<WrapEthFormProps> = ({ data, setData }) => {
           <TextField
             disabled={!isEditing}
             placeholder="Amount"
-            value={toReal(innerData.atomicAmount, ETH_DECIMALS)}
+            value={innerData.amount}
             onChange={handleAmountChange}
           />
         </FormControl>

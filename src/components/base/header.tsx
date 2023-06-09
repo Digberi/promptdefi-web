@@ -2,7 +2,7 @@ import { BlurCircular } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 
 import { InfoPanel } from './info-panel/info-panel';
-import { ChangeMode } from '../change-mode';
+import { ChangeMode } from '../ui/change-mode';
 
 import { APP_NAME } from '@/config/constants';
 import { useIsDesktop } from '@/hooks/is-desktop';
