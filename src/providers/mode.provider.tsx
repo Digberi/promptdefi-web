@@ -4,26 +4,31 @@ import { PaletteMode, useMediaQuery } from '@mui/material';
 
 import { CFC } from '@/types/react';
 
-interface ColorMode {
+interface ColorModeContext {
   toggleColorMode: () => void;
   mode: PaletteMode;
 }
 
-const ModeContext = createContext<ColorMode>({
+export enum ColorMode {
+  LIGHT = 'light',
+  DARK = 'dark'
+}
+
+const ModeContext = createContext<ColorModeContext>({
   toggleColorMode: () => {
     return;
   },
-  mode: 'light'
+  mode: ColorMode.LIGHT
 });
 
 export const ModeProvider: CFC = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const [mode, setMode] = useState<PaletteMode>(prefersDarkMode ? 'dark' : 'light');
+  const [mode, setMode] = useState<PaletteMode>(prefersDarkMode ? ColorMode.DARK : ColorMode.LIGHT);
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode: PaletteMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode: PaletteMode) => (prevMode === ColorMode.LIGHT ? ColorMode.DARK : ColorMode.LIGHT));
       },
       mode
     }),

@@ -12,7 +12,7 @@ import { CFC } from '@/types/react';
 
 export const ProvidersSandwich: CFC = ({ children }) => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/promptdefi-web">
       <ModeProvider>
         <MuiProvider>
           <AlertProvider>

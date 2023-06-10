@@ -4,7 +4,9 @@ import { TransactionDetailsForUserOp } from '@account-abstraction/sdk/dist/src/T
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { utils } from 'ethers';
 
-interface TransactionDetailsForUserBatchOp extends Omit<TransactionDetailsForUserOp, 'target' | 'value' | 'data'> {
+export type TypeDataFreeTransactionDetails = Omit<TransactionDetailsForUserOp, 'target' | 'value' | 'data'>;
+
+interface TransactionDetailsForUserBatchOp extends TypeDataFreeTransactionDetails {
   target: Array<string>;
   value: Array<BigNumberish>;
   data: Array<string>;

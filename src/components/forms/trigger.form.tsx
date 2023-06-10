@@ -1,5 +1,6 @@
 import { ChangeEventHandler, FC, useEffect, useState } from 'react';
 
+import { ShutterSpeed } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -96,6 +97,7 @@ export const TriggerForm: FC<TriggerFormProps> = ({ data, setData }) => {
           gap: 1
         }}
       >
+        <Chip avatar={<ShutterSpeed />} label="Trigger" />
         <Chip label="Create Portfolio" />
       </ButtonGroup>
 

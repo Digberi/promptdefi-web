@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { CssBaseline, PaletteMode, PaletteOptions, ThemeProvider, createTheme } from '@mui/material';
 import { indigo, blueGrey } from '@mui/material/colors';
 
-import { useColorMode } from './mode.provider';
+import { ColorMode, useColorMode } from './mode.provider';
 
 import { OverrideLinkBehaviorThemeComponents } from '@/components/base';
 import { CFC } from '@/types/react';
@@ -13,8 +13,8 @@ const common = {
 };
 
 const pallettes: Record<PaletteMode, PaletteOptions> = {
-  light: {
-    mode: 'light',
+  [ColorMode.LIGHT]: {
+    mode: ColorMode.LIGHT,
     background: {
       default: '#F5F5F5',
       paper: '#fff'
@@ -25,8 +25,8 @@ const pallettes: Record<PaletteMode, PaletteOptions> = {
     },
     ...common
   },
-  dark: {
-    mode: 'dark',
+  [ColorMode.DARK]: {
+    mode: ColorMode.DARK,
     background: {
       default: '#121212',
       paper: '#1e1e1e'

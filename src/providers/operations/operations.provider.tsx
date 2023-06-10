@@ -1,120 +1,69 @@
-import { createContext, useState } from 'react';
-
 import { useProvider } from 'wagmi';
 
+import { OperationsContext } from './operations.context';
+import { useOperationState } from './use-operation-state';
 import { useAlert } from '../alert.provider';
 
-import { bundlerClient } from '@/account-abstraction/bundler-client';
-import { BUNDLER_CONTRACT_ADDRESS, ENTRYPOINT_ADDRESS } from '@/config/contracts';
-import { preOpToBatchOp } from '@/core/helpers/pre-op-to-batch-op';
+import { ETHERSCAN_TX_URL } from '@/config/constants';
 import { OperationDictionary } from '@/core/operations/operation';
 import { OperationData } from '@/core/operations/operation.type';
+import { useSendBatch } from '@/hooks/use-send-batch';
 import { useSmartAccount } from '@/hooks/use-smart-account';
+import { useSubscribeOnBlock } from '@/hooks/use-subscribe-on-block';
 import { PreOpStruct } from '@/types/custom';
 import { CFC } from '@/types/react';
+import { asyncReduce } from '@/utils/async-reducer';
+import { awaiter } from '@/utils/awaiter';
+import { findBundlerTransaction } from '@/utils/find-bunler-transaction';
 
-interface OperationsContextProps<T = unknown> {
-  operations: Array<T>;
-  updateOperation: (index: number, operation: T) => void;
-  addOperation: (operation: T) => void;
-  sendOperations: () => Promise<void>;
-  setOperations: (operations: Array<T>) => void;
-}
+const reducer = async (acc: Array<PreOpStruct>, operation: OperationData) => {
+  const creator = OperationDictionary[operation.kind];
 
-export const OperationsContext = createContext<OperationsContextProps<OperationData>>({
-  operations: [],
-  updateOperation: () => {
-    return;
-  },
-  addOperation: () => {
-    return;
-  },
-  sendOperations: async () => {
-    return;
-  },
-  setOperations: () => {
-    return;
-  }
-});
+  // @ts-ignore
+  const preOp = await creator(operation.data);
+
+  return acc.concat(preOp);
+};
+
+const createBatchPreOp = async (operations: Array<OperationData>) =>
+  await asyncReduce(operations, reducer, [] as Array<PreOpStruct>);
 
 export const OperationsProvider: CFC = ({ children }) => {
-  const [operations, setOperations] = useState<Array<OperationData>>([]);
+  const { operations, addOperation, updateOperation, setOperations } = useOperationState();
   const { smartAccountApi } = useSmartAccount();
   const provider = useProvider();
   const { callAlert } = useAlert();
-
-  const updateOperation = (index: number, operation: OperationData) => {
-    setOperations(prevState => {
-      const newState = [...prevState];
-      newState[index] = operation;
-
-      return newState;
-    });
-  };
-
-  const addOperation = (operation: OperationData) => {
-    setOperations(prevState => [...prevState, operation]);
-  };
+  const { sendBatch } = useSendBatch({ log: true });
+  const { subscribe } = useSubscribeOnBlock();
 
   const sendOperations = async () => {
     if (!operations.length || !smartAccountApi) {
       return;
     }
 
-    const batchPreOp = await operations.reduce(async (acc, operation) => {
-      const accum = await acc;
+    const batchPreOp = await createBatchPreOp(operations);
 
-      const creator = OperationDictionary[operation.kind];
+    await sendBatch(batchPreOp);
 
-      // @ts-ignore
-      const preOp = await creator(operation.data);
-
-      return accum.concat(preOp);
-    }, Promise.resolve([]) as Promise<Array<PreOpStruct>>);
-
-    const batchOp = preOpToBatchOp(batchPreOp);
-
-    console.log({ batchOp });
-
-    const unsignedBatchOp = await smartAccountApi.createUnsignedUserBatchOp({ ...batchOp, gasLimit: 1000000 });
-
-    console.log({ unsignedBatchOp });
-
-    const op = await smartAccountApi.signUserOp(unsignedBatchOp);
-
-    console.log({ op });
-
-    const some = await bundlerClient.sendUserOpToBundler(op);
-
-    console.log({ some });
-
-    provider.on('block', async (level: number) => {
+    subscribe(async (level, unsubscribe) => {
       const { transactions } = await provider.getBlockWithTransactions(level);
-      const transaction = transactions.find(_transaction => {
-        return _transaction.from === BUNDLER_CONTRACT_ADDRESS && _transaction.to === ENTRYPOINT_ADDRESS;
-      });
+      const transaction = await findBundlerTransaction(transactions);
       if (!transaction) {
         return;
       }
 
-      provider.off('block');
+      unsubscribe();
 
-      transaction
-        .wait(1)
-        .then(receipt => {
-          if (receipt.status) {
-            callAlert(
-              `Transaction mined:`,
-              `https://goerli.etherscan.io/tx/${receipt.transactionHash}`,
-              receipt.status
-            );
-          } else {
-            callAlert(`Transaction failed:`, `https://goerli.etherscan.io/tx/${receipt.transactionHash}`, 0);
-          }
-        })
-        .catch(() => {
-          callAlert(`Transaction failed:`, `https://goerli.etherscan.io/tx/${transaction.hash}`, 0);
-        });
+      const etherscanLink = `${ETHERSCAN_TX_URL}/${transaction.hash}`;
+      const { data: receipt, isOk } = await awaiter(transaction.wait(1));
+
+      if (!isOk) {
+        callAlert(`Transaction failed:`, etherscanLink, 0);
+
+        return;
+      }
+
+      callAlert(`Transaction mined:`, etherscanLink, receipt.status ?? 1);
     });
   };
 

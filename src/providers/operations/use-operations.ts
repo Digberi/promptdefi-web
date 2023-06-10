@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { OperationsContext } from './operations.provider';
+import { OperationsContext } from './operations.context';
 
 export const useOperations = () => {
   const context = useContext(OperationsContext);
