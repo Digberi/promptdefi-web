@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import { createAaveV3Form } from './avve3.from';
 import { LidoDepositForm } from './lido-deposit.form';
 import { SendTokenForm } from './send-token.from';
+import { TriggerForm } from './trigger.form';
 import { UniswapForm } from './uniswap.form';
 import { WrapEthForm } from './wrap-eth.from';
 
@@ -24,7 +25,8 @@ const FormsDictionary = {
   [Operation.AaveDeposit]: createAaveV3Form('Aave deposit'),
   [Operation.AaveWithdraw]: createAaveV3Form('Aave withdraw'),
   [Operation.AaveRepay]: createAaveV3Form('Aave repay'),
-  [Operation.SwapTokens]: UniswapForm
+  [Operation.SwapTokens]: UniswapForm,
+  [Operation.CreatePortfolio]: TriggerForm
 } as const;
 
 export const FormsGenerator: FC<FormGeneratorProps> = ({ listOperations, setOperation }) => {

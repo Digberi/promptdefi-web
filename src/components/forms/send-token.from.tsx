@@ -44,7 +44,7 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
   const handleTokenChange = ({ target }: SelectChangeEvent) => {
     setInnerData(prev => ({
       ...prev,
-      tokenAddress: target.value
+      tokenSymbol: target.value
     }));
   };
 

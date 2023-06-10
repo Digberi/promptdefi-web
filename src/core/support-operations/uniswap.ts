@@ -20,8 +20,9 @@ import { WrapEth } from './wrap-eth';
 
 import { MAX_FEE_PER_GAS, MAX_PRIORITY_FEE_PER_GAS } from '@/config/constants';
 import { POOL_FACTORY_CONTRACT_ADDRESS, QUOTER_CONTRACT_ADDRESS, SWAP_ROUTER_ADDRESS } from '@/config/contracts';
-import { Token as IToken, tokens } from '@/config/tokens';
+import { Token as IToken } from '@/config/tokens';
 import { PreOpStruct } from '@/types/custom';
+import { getTokenByTokenSymbol } from '@/utils/get-token-by-symbol';
 import { toAtomic } from '@/utils/units';
 
 //#region Types
@@ -78,8 +79,8 @@ interface swapOptions {
 
 export namespace Uniswap {
   export interface CreateSwapPreOpParams {
-    tokenSymbolIn?: string;
-    tokenSymbolOut?: string;
+    tokenSymbolIn: string;
+    tokenSymbolOut: string;
     amount: string;
   }
 }
@@ -120,8 +121,8 @@ export class Uniswap {
       throw new Error('Uniswap instance not initialized');
     }
 
-    const tokenIn = tokens.find(token => token.symbol === tokenSymbolIn);
-    const tokenOut = tokens.find(token => token.symbol === tokenSymbolOut);
+    const tokenIn = getTokenByTokenSymbol(tokenSymbolIn);
+    const tokenOut = getTokenByTokenSymbol(tokenSymbolOut);
 
     if (!tokenIn) {
       throw new Error(`Token ${tokenSymbolIn} not found`);
@@ -170,7 +171,6 @@ export class Uniswap {
     if (needWethOut) {
       const outputAmount = trade.outputAmount.toExact();
 
-      console.log({ outputAmount });
       const wrapEthPreOp = WrapEth.createWithdrawPreOp({
         amount: outputAmount
       });

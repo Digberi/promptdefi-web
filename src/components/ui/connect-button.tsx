@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 import { Web3AuthConnector } from '@/auth/wagmi';
@@ -14,14 +14,25 @@ export const ConnectButton = () => {
   const shortAddress = shrink(address);
 
   return (
-    <div>
+    <Box
+      sx={{
+        width: '100%'
+      }}
+    >
       {isConnected ? (
         <Button onClick={() => disconnect()}>{shortAddress}</Button>
       ) : (
-        <Button color="secondary" onClick={() => connect()}>
+        <Button
+          sx={{
+            width: '100%'
+          }}
+          variant="contained"
+          color="success"
+          onClick={() => connect()}
+        >
           Connect
         </Button>
       )}
-    </div>
+    </Box>
   );
 };

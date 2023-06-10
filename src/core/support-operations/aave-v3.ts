@@ -4,8 +4,8 @@ import { Erc20 } from './erc20-token';
 
 import { aaveV3PoolABI } from '@/config/abi';
 import { AAVE_V3_POOL_CONTRACT_ADDRESS } from '@/config/contracts';
-import { tokens } from '@/config/tokens';
 import { PreOpStruct } from '@/types/custom';
+import { getTokenByTokenSymbol } from '@/utils/get-token-by-symbol';
 import { toAtomic } from '@/utils/units';
 
 export namespace AAveV3 {
@@ -33,15 +33,6 @@ export namespace AAveV3 {
     receiver: string;
   }
 }
-
-const getTokenByTokenSymbol = (tokenSymbol: string) => {
-  const token = tokens.find(({ symbol }) => symbol === tokenSymbol);
-  if (!token) {
-    throw new Error(`Token ${tokenSymbol} not found`);
-  }
-
-  return token;
-};
 
 const getData = (tokenSymbol: string, amount: BigNumberish) => {
   const token = getTokenByTokenSymbol(tokenSymbol);
@@ -123,6 +114,10 @@ export class AAveV3 {
       value: 0,
       data: depositData
     };
+
+    console.log({
+      tokenAddress
+    });
 
     return approvePreOp.concat(depositPreOp);
   }

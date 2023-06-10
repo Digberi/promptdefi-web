@@ -1,5 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
 
+import { AlertProvider } from './alert.provider';
 import { ModeProvider } from './mode.provider';
 import { MuiProvider } from './mui.provider';
 import { OperationsProvider } from './operations/operations.provider';
@@ -14,13 +15,15 @@ export const ProvidersSandwich: CFC = ({ children }) => {
     <BrowserRouter>
       <ModeProvider>
         <MuiProvider>
-          <WagmiProvider>
-            <SmartAccountProvider>
-              <OperationsProvider>
-                <TabProvider>{children}</TabProvider>
-              </OperationsProvider>
-            </SmartAccountProvider>
-          </WagmiProvider>
+          <AlertProvider>
+            <WagmiProvider>
+              <SmartAccountProvider>
+                <OperationsProvider>
+                  <TabProvider>{children}</TabProvider>
+                </OperationsProvider>
+              </SmartAccountProvider>
+            </WagmiProvider>
+          </AlertProvider>
         </MuiProvider>
       </ModeProvider>
     </BrowserRouter>

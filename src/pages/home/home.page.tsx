@@ -10,6 +10,7 @@ import { PromptInput } from '@/components/base/promt-input';
 import { TabPanel, Tabs, useTab } from '@/components/base/tabs';
 import { Hand } from '@/components/svg/hand';
 import { Template } from '@/components/ui/template';
+import { APP_NAME } from '@/config/constants';
 import { templates } from '@/config/templates';
 import { useOperations } from '@/providers/operations';
 
@@ -19,7 +20,7 @@ const HomePlaceholder = () => {
   return (
     <Box sx={{ display: 'grid', placeItems: 'center', height: 'fit-content', alignSelf: 'center' }}>
       <Hand />
-      <Typography variant="h6">Hi! I am CHANGE NAME Helper</Typography>
+      <Typography variant="h6">Hi! I am {APP_NAME} Helper</Typography>
       <Typography variant="body1">Just describe your request, and I'll assist you.</Typography>
     </Box>
   );

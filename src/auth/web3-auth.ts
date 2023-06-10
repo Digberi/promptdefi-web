@@ -5,22 +5,23 @@ import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector';
 import { Chain } from 'wagmi';
 
-import { APP_NAME } from '@/config/constants';
+import logoUrl from '@/assets/logo.png';
+// import { APP_NAME } from '@/config/constants';
 
-const {
-  VITE_WEB3AUTH_CLIENT_ID: clientId,
-  VITE_WEB3AUTH_CLIENT_VERIFIER_NAME: verifier,
-  VITE_AUTH0_CLIENT_ID: auth0ClientId
-} = import.meta.env;
+// const {
+//   VITE_WEB3AUTH_CLIENT_ID: clientId,
+//   VITE_WEB3AUTH_CLIENT_VERIFIER_NAME: verifier,
+//   VITE_AUTH0_CLIENT_ID: auth0ClientId
+// } = import.meta.env;
 
-const WEB3_NETWORK = 'testnet';
+// const WEB3_NETWORK = 'testnet';
 
 export const Web3AuthConnectorInstance = (chains: Chain[]) => {
   // Create Web3Auth Instance
-  const name = APP_NAME;
+  const name = 'My App Name';
 
   const web3AuthInstance = new Web3Auth({
-    clientId,
+    clientId: 'YOUR_CLIENT_ID',
     chainConfig: {
       chainNamespace: CHAIN_NAMESPACES.EIP155,
       chainId: '0x' + chains[0].id.toString(16),
@@ -30,12 +31,11 @@ export const Web3AuthConnectorInstance = (chains: Chain[]) => {
       ticker: chains[0].nativeCurrency?.symbol
     },
     sessionTime: 86400 * 7,
-    web3AuthNetwork: WEB3_NETWORK,
     uiConfig: {
       appName: name,
       theme: 'auto',
       defaultLanguage: 'en',
-      appLogo: 'https://web3auth.io/images/w3a-L-Favicon-1.svg', // Your App Logo Here
+      appLogo: logoUrl, // Your App Logo Here
       modalZIndex: '2147483647'
     }
   });
@@ -43,22 +43,22 @@ export const Web3AuthConnectorInstance = (chains: Chain[]) => {
   // Add openlogin adapter for customisations
   const openloginAdapterInstance = new OpenloginAdapter({
     adapterSettings: {
-      network: WEB3_NETWORK,
+      network: 'cyan',
       uxMode: 'popup',
       whiteLabel: {
         name,
-        logoLight: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
-        logoDark: 'https://web3auth.io/images/w3a-D-Favicon-1.svg',
+        logoLight: logoUrl,
+        logoDark: logoUrl,
         defaultLanguage: 'en',
         dark: true // whether to enable dark mode. defaultValue: false
-      },
-      loginConfig: {
-        jwt: {
-          verifier,
-          typeOfLogin: 'jwt',
-          clientId: auth0ClientId
-        }
       }
+      // loginConfig: {
+      //   jwt: {
+      //     verifier,
+      //     typeOfLogin: 'jwt',
+      //     clientId: auth0ClientId
+      //   }
+      // }
     }
   });
   web3AuthInstance.configureAdapter(openloginAdapterInstance);

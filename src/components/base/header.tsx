@@ -1,9 +1,9 @@
-import { BlurCircular } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 
 import { InfoPanel } from './info-panel/info-panel';
 import { ChangeMode } from '../ui/change-mode';
 
+import logoUrl from '@/assets/logo.svg';
 import { APP_NAME } from '@/config/constants';
 import { useIsDesktop } from '@/hooks/is-desktop';
 
@@ -26,7 +26,7 @@ export const Header = () => {
         }}
       >
         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-          <BlurCircular />
+          <img src={logoUrl} alt="logo" />
         </IconButton>
         <Typography
           sx={{

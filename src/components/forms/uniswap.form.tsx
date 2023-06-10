@@ -21,6 +21,7 @@ import { useProvider } from 'wagmi';
 import { tokens } from '@/config/tokens';
 import { Uniswap, createToken } from '@/core/support-operations/uniswap';
 import { useSmartAccount } from '@/hooks/use-smart-account';
+import { getTokenByTokenSymbol } from '@/utils/get-token-by-symbol';
 import { toAtomic, toReal } from '@/utils/units';
 
 type UniswapParams = Uniswap.CreateSwapPreOpParams;
@@ -47,14 +48,8 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
     }
   }, [provider, smartAccountAddress]);
 
-  const selectedInToken = useMemo(
-    () => tokens.find(token => token.symbol === innerData.tokenSymbolIn)!,
-    [innerData.tokenSymbolIn]
-  );
-  const selectedOutToken = useMemo(
-    () => tokens.find(token => token.symbol === innerData.tokenSymbolOut)!,
-    [innerData.tokenSymbolOut]
-  );
+  const selectedInToken = useMemo(() => getTokenByTokenSymbol(innerData.tokenSymbolIn), [innerData.tokenSymbolIn]);
+  const selectedOutToken = useMemo(() => getTokenByTokenSymbol(innerData.tokenSymbolOut), [innerData.tokenSymbolOut]);
 
   useEffect(() => {
     const getOutputAmount = async () => {

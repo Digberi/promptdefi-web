@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { ContentCopy, LinkOff, SmartToy, Wallet } from '@mui/icons-material';
 import {
@@ -13,12 +13,12 @@ import {
   Typography,
   styled
 } from '@mui/material';
-import { goerli, useAccount, useBalance, useConnect, useDisconnect } from 'wagmi';
+import { goerli, useAccount, useBalance, useConnect, useDisconnect, useProvider } from 'wagmi';
 
 import { Web3AuthConnector } from '@/auth/wagmi';
 import { Page } from '@/components/base/page';
 import { NetworkAvatar } from '@/components/ui/network-avatar';
-import { Token, tokens } from '@/config/tokens';
+import { Token, aaveTokens, tokens } from '@/config/tokens';
 import { useSmartAccount } from '@/hooks/use-smart-account';
 import { CFC } from '@/types/react';
 import { copy } from '@/utils/copy';
@@ -43,11 +43,20 @@ const GridList = styled(List)(({ theme }) => ({
 
 const Balance: FC<{ token: Token }> = ({ token }) => {
   const { smartAccountAddress } = useSmartAccount();
+  const provider = useProvider();
 
-  const { data: tokenInfo } = useBalance({
+  const { data: tokenInfo, refetch } = useBalance({
     address: smartAccountAddress,
     token: token.address
   });
+
+  useEffect(() => {
+    provider.on('block', async () => refetch());
+
+    return () => {
+      provider.off('block');
+    };
+  }, [provider, refetch]);
 
   return (
     <Tile
@@ -79,7 +88,14 @@ const Balance: FC<{ token: Token }> = ({ token }) => {
       />
       <ListItemText
         primaryTypographyProps={{
-          variant: 'body2'
+          variant: 'body2',
+          sx: {
+            textAlign: 'right',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            maxWidth: '72px'
+          }
         }}
         primary={tokenInfo?.formatted}
       />
@@ -234,7 +250,7 @@ export const AccountPage = () => {
         <>
           <SubHeader>Balances</SubHeader>
           <GridList>
-            {tokens.map(token => (
+            {aaveTokens.concat(tokens).map(token => (
               <Balance key={token.address ?? '0'} token={token} />
             ))}
           </GridList>

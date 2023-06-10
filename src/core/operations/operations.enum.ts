@@ -6,5 +6,6 @@ export enum Operation {
   AaveBorrow = 'AaveBorrow',
   AaveRepay = 'AaveRepay',
   AaveWithdraw = 'AaveWithdraw',
-  SwapTokens = 'SwapTokens'
+  SwapTokens = 'SwapTokens',
+  CreatePortfolio = 'CreatePortfolio'
 }

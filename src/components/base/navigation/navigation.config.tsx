@@ -19,6 +19,7 @@ export const NavigationConfig: NavigationConfig = {
     {
       label: 'Active Strategies',
       link: Routes.STRATEGIES,
+      disabled: true,
       //TODO: Replace with custom icon
       icon: <SsidChart />
     },

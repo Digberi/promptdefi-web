@@ -1,6 +1,11 @@
 import { createContext, useState } from 'react';
 
+import { useProvider } from 'wagmi';
+
+import { useAlert } from '../alert.provider';
+
 import { bundlerClient } from '@/account-abstraction/bundler-client';
+import { BUNDLER_CONTRACT_ADDRESS, ENTRYPOINT_ADDRESS } from '@/config/contracts';
 import { preOpToBatchOp } from '@/core/helpers/pre-op-to-batch-op';
 import { OperationDictionary } from '@/core/operations/operation';
 import { OperationData } from '@/core/operations/operation.type';
@@ -35,6 +40,8 @@ export const OperationsContext = createContext<OperationsContextProps<OperationD
 export const OperationsProvider: CFC = ({ children }) => {
   const [operations, setOperations] = useState<Array<OperationData>>([]);
   const { smartAccountApi } = useSmartAccount();
+  const provider = useProvider();
+  const { callAlert } = useAlert();
 
   const updateOperation = (index: number, operation: OperationData) => {
     setOperations(prevState => {
@@ -80,6 +87,35 @@ export const OperationsProvider: CFC = ({ children }) => {
     const some = await bundlerClient.sendUserOpToBundler(op);
 
     console.log({ some });
+
+    provider.on('block', async (level: number) => {
+      const { transactions } = await provider.getBlockWithTransactions(level);
+      const transaction = transactions.find(_transaction => {
+        return _transaction.from === BUNDLER_CONTRACT_ADDRESS && _transaction.to === ENTRYPOINT_ADDRESS;
+      });
+      if (!transaction) {
+        return;
+      }
+
+      provider.off('block');
+
+      transaction
+        .wait(1)
+        .then(receipt => {
+          if (receipt.status) {
+            callAlert(
+              `Transaction mined:`,
+              `https://goerli.etherscan.io/tx/${receipt.transactionHash}`,
+              receipt.status
+            );
+          } else {
+            callAlert(`Transaction failed:`, `https://goerli.etherscan.io/tx/${receipt.transactionHash}`, 0);
+          }
+        })
+        .catch(() => {
+          callAlert(`Transaction failed:`, `https://goerli.etherscan.io/tx/${transaction.hash}`, 0);
+        });
+    });
 
     // setOperations([]);
   };
