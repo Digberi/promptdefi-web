@@ -1,8 +1,15 @@
 import { useState, useCallback } from 'react';
 
-const supportedFeatures = ['Multi Swap', 'Swap & Bridge', 'Deposit & Borrow', 'Repay & Withdraw', 'Collateral Swap'];
+const supportedFeatures = [
+  'Swap Tokens',
+  'Send Tokens',
+  'Deposit to Lido',
+  'Wrap Eth',
+  'Borrow & Deposit',
+  'Repay & Withdraw'
+];
 
-const comingSoonFeatures = ['Collateral Swap', 'DeptSwap'];
+const triggers = ['Stop-Loss Trigger', 'Take-Profit Trigger'];
 
 export const useInfoPanelViewModel = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,5 +29,5 @@ export const useInfoPanelViewModel = () => {
     []
   );
 
-  return { isOpen, toggleDrawer, supportedFeatures, comingSoonFeatures };
+  return { isOpen, toggleDrawer, supportedFeatures, triggers };
 };

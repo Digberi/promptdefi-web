@@ -43,6 +43,7 @@ jobs:
           VITE_WEB3AUTH_CLIENT_ID: ${{ secrets.VITE_WEB3AUTH_CLIENT_ID }}
           VITE_WEB3AUTH_CLIENT_VERIFIER_NAME: ${{ secrets.VITE_WEB3AUTH_CLIENT_VERIFIER_NAME }}
           VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+          VITE_APP_TITLE: Prompt Defi
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact

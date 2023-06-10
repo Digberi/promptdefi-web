@@ -1,4 +1,4 @@
-export const APP_NAME = 'Promt DeFi';
+export const APP_NAME = import.meta.env.VITE_APP_TITLE;
 
 export const BUNDLER_URL = 'http://64.227.119.238:3000/rpc';
 export const PROMT_API_URL = 'http://64.227.119.238:4000/parse-prompt';

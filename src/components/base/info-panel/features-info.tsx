@@ -1,12 +1,29 @@
 import { FC } from 'react';
 
-import { Done, Update } from '@mui/icons-material';
-import { Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Done, ShutterSpeed } from '@mui/icons-material';
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  styled
+} from '@mui/material';
 
 import { useInfoPanelViewModel } from './use-info-panel.vm';
 
+const CustomListItem = styled(ListItem)(({ theme }) => ({
+  padding: theme.spacing(1, 2)
+}));
+const SubHeader = styled(Typography)(({ theme }) => ({
+  marginTop: theme.spacing(2)
+}));
+
 export const FeaturesInfo: FC = () => {
-  const { supportedFeatures, comingSoonFeatures } = useInfoPanelViewModel();
+  const { supportedFeatures, triggers } = useInfoPanelViewModel();
 
   return (
     <Box>
@@ -14,33 +31,29 @@ export const FeaturesInfo: FC = () => {
         <Typography variant="h5">What can we do?</Typography>
       </Box>
 
-      <Typography variant="h6">Supported Features</Typography>
+      <SubHeader variant="body1">Supported Features</SubHeader>
       <List>
         {supportedFeatures.map(text => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Done />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+          <CustomListItem key={text}>
+            <ListItemIcon>
+              <Done color="success" />
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </CustomListItem>
         ))}
       </List>
 
       <Divider />
 
-      <Typography variant="h6">Coming Soon</Typography>
+      <SubHeader variant="body1">Triggers</SubHeader>
       <List>
-        {comingSoonFeatures.map(text => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Update />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+        {triggers.map(text => (
+          <CustomListItem key={text}>
+            <ListItemIcon>
+              <ShutterSpeed />
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </CustomListItem>
         ))}
       </List>
     </Box>

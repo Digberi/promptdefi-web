@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ArrowBack, Settings } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
 import { Backdrop, Box, Button, ButtonGroup, IconButton, Typography, styled } from '@mui/material';
 
 import { FormsGenerator } from '../forms/forms.generator';
@@ -67,9 +67,7 @@ export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen })
           <ArrowBack />
         </IconButton>
         <Typography variant="body1">Request result</Typography>
-        <IconButton>
-          <Settings />
-        </IconButton>
+        <IconButton>{/* <Settings /> */}</IconButton>
       </CustomBackdropHeader>
 
       <CustomBackdropContent>
