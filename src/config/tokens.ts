@@ -83,36 +83,36 @@ export const tokens: Array<Token> = [
   }
 ];
 
-export const aaveTokens: Array<Token> = [
-  {
-    address: '0x8Be59D90A7Dc679C5cE5a7963cD1082dAB499918',
-    logoURI: 'https://etherscan.io/token/images/aave_32.png',
-    symbol: 'aEthUSDC',
-    decimals: 6,
-    name: 'Aave Ethereum USDC'
-  },
-  {
-    address: '0xf3368D1383cE079006E5D1d56878b92bbf08F1c2',
-    logoURI: 'https://etherscan.io/token/images/aave_32.png',
-    symbol: 'aEthUSDT',
-    decimals: 6,
-    name: 'Aave Ethereum USDT'
-  },
-  {
-    address: '0x493DC51c35F7ddD891262b8733C63eABaf14786f',
-    logoURI: 'https://etherscan.io/token/images/aave_32.png',
-    symbol: 'aEthLINK',
-    name: 'Aave Ethereum LINK',
-    decimals: 18
-  },
-  {
-    address: '0x76a79F46329a8EB7d7d1c50F45a4090707588864',
-    logoURI: 'https://etherscan.io/token/images/aave_32.png',
-    symbol: 'variableDebtEthLINK',
-    name: 'Aave Ethereum LINK Variable Debt',
-    decimals: 18
-  }
-];
+// export const aaveTokens: Array<Token> = [
+//   {
+//     address: '0x8Be59D90A7Dc679C5cE5a7963cD1082dAB499918',
+//     logoURI: 'https://etherscan.io/token/images/aave_32.png',
+//     symbol: 'aEthUSDC',
+//     decimals: 6,
+//     name: 'Aave Ethereum USDC'
+//   },
+//   {
+//     address: '0xf3368D1383cE079006E5D1d56878b92bbf08F1c2',
+//     logoURI: 'https://etherscan.io/token/images/aave_32.png',
+//     symbol: 'aEthUSDT',
+//     decimals: 6,
+//     name: 'Aave Ethereum USDT'
+//   },
+//   {
+//     address: '0x493DC51c35F7ddD891262b8733C63eABaf14786f',
+//     logoURI: 'https://etherscan.io/token/images/aave_32.png',
+//     symbol: 'aEthLINK',
+//     name: 'Aave Ethereum LINK',
+//     decimals: 18
+//   },
+//   {
+//     address: '0x76a79F46329a8EB7d7d1c50F45a4090707588864',
+//     logoURI: 'https://etherscan.io/token/images/aave_32.png',
+//     symbol: 'variableDebtEthLINK',
+//     name: 'Aave Ethereum LINK Variable Debt',
+//     decimals: 18
+//   }
+// ];
 
 export const tokenAddresses = [
   '0x2E8D98fd126a32362F2Bd8aA427E59a1ec63F780', // USDT
