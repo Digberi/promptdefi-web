@@ -18,6 +18,7 @@ import {
 import { JSBI } from '@uniswap/sdk';
 import { useProvider } from 'wagmi';
 
+// import { Uniswap as UniswapIcon } from '@/components/svg/uniswap';
 import { tokens } from '@/config/tokens';
 import { Uniswap, createToken } from '@/core/support-operations/uniswap';
 import { useSmartAccount } from '@/hooks/use-smart-account';
@@ -126,7 +127,13 @@ export const UniswapForm: FC<UniswapFormProps> = ({ data, setData }) => {
           gap: 1
         }}
       >
-        <Chip label="Swap Token" />
+        {/* <Chip
+          sx={{
+            px: 1
+          }}
+          avatar={<UniswapIcon />}
+          label="Uniswap"
+        /> */}
         <Chip label="Swap Token" />
       </ButtonGroup>
 

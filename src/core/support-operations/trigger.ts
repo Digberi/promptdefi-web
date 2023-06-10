@@ -36,7 +36,7 @@ export namespace Trigger {
 const LINK_TOKEN_ADDRESS = '0x326C977E6efc84E512bB9C30f76E30c160eD06FB';
 const BASE_STABLECOIN_TOKEN = tokens.find(token => token.symbol === 'USDC')!;
 const SALT = 12;
-const LINK_PRICE = 5;
+const LINK_PRICE = 3;
 
 const calculatedPoint = (amount: string, tokenPrice: BigNumberish, param: string) => {
   const atomicAmount = toAtomic(amount, 18);

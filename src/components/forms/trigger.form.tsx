@@ -97,7 +97,6 @@ export const TriggerForm: FC<TriggerFormProps> = ({ data, setData }) => {
         }}
       >
         <Chip label="Create Portfolio" />
-        <Chip label="Create Portfolio" />
       </ButtonGroup>
 
       <FormGroup>

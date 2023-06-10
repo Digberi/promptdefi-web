@@ -60,6 +60,11 @@ export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen })
     setIsOpen(false);
   };
 
+  const handleSendOperations = async () => {
+    await sendOperations();
+    handleCancel();
+  };
+
   return (
     <CustomBackdrop open={isOpen}>
       <CustomBackdropHeader>
@@ -76,7 +81,7 @@ export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen })
 
       <CustomBackdropFooter fullWidth>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button variant="contained" onClick={sendOperations}>
+        <Button variant="contained" onClick={handleSendOperations}>
           Execute
         </Button>
       </CustomBackdropFooter>

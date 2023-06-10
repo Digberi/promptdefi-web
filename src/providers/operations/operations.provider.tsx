@@ -17,7 +17,7 @@ interface OperationsContextProps<T = unknown> {
   operations: Array<T>;
   updateOperation: (index: number, operation: T) => void;
   addOperation: (operation: T) => void;
-  sendOperations: () => void;
+  sendOperations: () => Promise<void>;
   setOperations: (operations: Array<T>) => void;
 }
 
@@ -29,7 +29,7 @@ export const OperationsContext = createContext<OperationsContextProps<OperationD
   addOperation: () => {
     return;
   },
-  sendOperations: () => {
+  sendOperations: async () => {
     return;
   },
   setOperations: () => {
@@ -116,8 +116,6 @@ export const OperationsProvider: CFC = ({ children }) => {
           callAlert(`Transaction failed:`, `https://goerli.etherscan.io/tx/${transaction.hash}`, 0);
         });
     });
-
-    // setOperations([]);
   };
 
   return (

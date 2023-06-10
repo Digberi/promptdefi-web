@@ -76,7 +76,6 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
         }}
       >
         <Chip label="Send Token" />
-        <Chip label="Send Token" />
       </ButtonGroup>
 
       <FormGroup>

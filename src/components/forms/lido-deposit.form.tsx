@@ -47,7 +47,6 @@ export const LidoDepositForm: FC<LidoDepositFormProps> = ({ data, setData }) => 
         }}
       >
         <Chip label="Lido deposit" />
-        <Chip label="Lido deposit" />
       </ButtonGroup>
       <FormGroup>
         <RelSubHeader>Amount</RelSubHeader>

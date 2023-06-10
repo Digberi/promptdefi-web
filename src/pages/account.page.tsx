@@ -176,6 +176,7 @@ const WalletTile = () => {
     connector: Web3AuthConnector
   });
   const { disconnect } = useDisconnect();
+  console.log({ address });
 
   return (
     <Tile>

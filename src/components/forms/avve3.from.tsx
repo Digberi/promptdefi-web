@@ -82,7 +82,6 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
           }}
         >
           <Chip label={label} />
-          <Chip label={label} />
         </ButtonGroup>
 
         <FormGroup>

@@ -1,17 +1,7 @@
 import { FC } from 'react';
 
 import { Done, ShutterSpeed } from '@mui/icons-material';
-import {
-  Box,
-  Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  styled
-} from '@mui/material';
+import { Box, Divider, List, ListItem, ListItemIcon, ListItemText, Typography, styled } from '@mui/material';
 
 import { useInfoPanelViewModel } from './use-info-panel.vm';
 

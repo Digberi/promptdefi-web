@@ -48,7 +48,6 @@ export const WrapEthForm: FC<WrapEthFormProps> = ({ data, setData }) => {
         }}
       >
         <Chip label="Wrap Ethereum" />
-        <Chip label="Wrap Ethereum" />
       </ButtonGroup>
       <FormGroup>
         <RelSubHeader>Amount</RelSubHeader>
