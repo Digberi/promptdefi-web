@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useProvider, useSigner } from 'wagmi';
 
 import { accountApiFactory } from '@/account-abstraction/account-api';
 import { BatchAccountAPI } from '@/account-abstraction/batch-simple-account-api';
@@ -12,7 +12,6 @@ export const SmartAccountContext = createContext<{
 }>({});
 
 export const SmartAccountProvider: CFC = ({ children }) => {
-  const { address, isConnected } = useAccount();
   const provider = useProvider();
   const { data: signer } = useSigner();
 
@@ -22,22 +21,24 @@ export const SmartAccountProvider: CFC = ({ children }) => {
   useEffect(() => {
     (async () => {
       try {
-        if (isConnected && provider && address && signer) {
-          const tempBatchAccountApi = await accountApiFactory({
-            provider,
-            signer
-          });
-
-          setSmartAccountApi(tempBatchAccountApi);
-          const accAddress = (await tempBatchAccountApi.getAccountAddress()) as `0x${string}`;
-
-          setSmartAccountAddress(accAddress);
+        if (!provider || !signer) {
+          return;
         }
+
+        const tempBatchAccountApi = await accountApiFactory({
+          provider,
+          signer
+        });
+
+        setSmartAccountApi(tempBatchAccountApi);
+
+        const accAddress = (await tempBatchAccountApi.getAccountAddress()) as `0x${string}`;
+        setSmartAccountAddress(accAddress);
       } catch (e) {
         console.error(e);
       }
     })();
-  }, [provider, isConnected, address, signer]);
+  }, [provider, signer]);
 
   return (
     <SmartAccountContext.Provider value={{ smartAccountApi, smartAccountAddress }}>

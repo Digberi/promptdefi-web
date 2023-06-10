@@ -10,8 +10,7 @@ interface MicroSpeechRecognitionProps {
 }
 
 export const MicroSpeechRecognition: FC<MicroSpeechRecognitionProps> = ({ onRecognitionResult }) => {
-  const { isListening, result, isSpeechRecognitionSupported, startSpeechRecognition, stopSpeechRecognition } =
-    useSpeechRecognition();
+  const { isListening, result, isSupported, startSpeechRecognition, stopSpeechRecognition } = useSpeechRecognition();
 
   useEffect(() => {
     if (result) {
@@ -51,7 +50,7 @@ export const MicroSpeechRecognition: FC<MicroSpeechRecognitionProps> = ({ onReco
           <Mic color="primary">mic</Mic>
         </IconButton>
       ) : (
-        <IconButton disabled={!isSpeechRecognitionSupported} onClick={startSpeechRecognition}>
+        <IconButton disabled={!isSupported} onClick={startSpeechRecognition}>
           <Mic>mic_off</Mic>
         </IconButton>
       )}

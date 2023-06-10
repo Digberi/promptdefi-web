@@ -1,6 +1,6 @@
 export const APP_NAME = import.meta.env.VITE_APP_TITLE;
 
-export const BUNDLER_URL = 'https://64.226.95.115/rpc';
+export const BUNDLER_URL = 'https://bundler-hackathon.madfish.xyz/rpc';
 export const PROMT_API_URL = 'https://shark-app-zmv6o.ondigitalocean.app/parse-prompt';
 export const ETHERSCAN_TX_URL = 'https://goerli.etherscan.io/tx';
 
