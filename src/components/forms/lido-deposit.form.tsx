@@ -3,9 +3,9 @@ import { ChangeEventHandler, FC, useState } from 'react';
 import { Box, Button, ButtonGroup, Chip, FormControl, FormGroup, TextField } from '@mui/material';
 
 import { RelSubHeader } from './list-subheader';
+import { Lido as LidoIcon } from '../svg/lido';
 
 import { Lido } from '@/core/support-operations/lido';
-
 type LidoDepositProps = Lido.CreateDepositPreOpParams;
 
 interface LidoDepositFormProps {
@@ -46,7 +46,19 @@ export const LidoDepositForm: FC<LidoDepositFormProps> = ({ data, setData }) => 
           gap: 1
         }}
       >
-        <Chip label="Lido deposit" />
+        <Chip
+          avatar={
+            <LidoIcon
+              sx={{
+                backgroundColor: 'background.paper',
+                borderRadius: '100vh',
+                p: 0.25
+              }}
+            />
+          }
+          label="Lido"
+        />
+        <Chip label="Deposit" />
       </ButtonGroup>
       <FormGroup>
         <RelSubHeader>Amount</RelSubHeader>

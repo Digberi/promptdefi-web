@@ -8,6 +8,10 @@ import { useColorMode } from './mode.provider';
 import { OverrideLinkBehaviorThemeComponents } from '@/components/base';
 import { CFC } from '@/types/react';
 
+const common = {
+  primary: indigo
+};
+
 const pallettes: Record<PaletteMode, PaletteOptions> = {
   light: {
     mode: 'light',
@@ -15,11 +19,11 @@ const pallettes: Record<PaletteMode, PaletteOptions> = {
       default: '#F5F5F5',
       paper: '#fff'
     },
-    primary: indigo,
     header: {
       background: indigo[500],
       text: '#fff'
-    }
+    },
+    ...common
   },
   dark: {
     mode: 'dark',
@@ -27,11 +31,11 @@ const pallettes: Record<PaletteMode, PaletteOptions> = {
       default: '#121212',
       paper: '#1e1e1e'
     },
-    primary: indigo,
     header: {
       background: indigo[900],
       text: '#fff'
-    }
+    },
+    ...common
   }
 };
 

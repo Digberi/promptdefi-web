@@ -18,7 +18,7 @@ import { goerli, useAccount, useBalance, useConnect, useDisconnect, useProvider 
 import { Web3AuthConnector } from '@/auth/wagmi';
 import { Page } from '@/components/base/page';
 import { NetworkAvatar } from '@/components/ui/network-avatar';
-import { Token, aaveTokens, tokens } from '@/config/tokens';
+import { Token, tokens } from '@/config/tokens';
 import { useSmartAccount } from '@/hooks/use-smart-account';
 import { CFC } from '@/types/react';
 import { copy } from '@/utils/copy';
@@ -251,7 +251,7 @@ export const AccountPage = () => {
         <>
           <SubHeader>Balances</SubHeader>
           <GridList>
-            {aaveTokens.concat(tokens).map(token => (
+            {tokens.map(token => (
               <Balance key={token.address ?? '0'} token={token} />
             ))}
           </GridList>

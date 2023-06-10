@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 
 import { RelSubHeader } from './list-subheader';
+import { Aave } from '../svg/aave';
 
 import { tokens } from '@/config/tokens';
 import { AAveV3 } from '@/core/support-operations/aave-v3';
@@ -81,6 +82,7 @@ export const createAaveV3Form = <T extends AAveV3Params>(label: string) => {
             gap: 1
           }}
         >
+          <Chip avatar={<Aave />} label="Aave V3" />
           <Chip label={label} />
         </ButtonGroup>
 

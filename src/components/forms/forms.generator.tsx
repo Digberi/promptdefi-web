@@ -21,10 +21,10 @@ const FormsDictionary = {
   [Operation.SendToken]: SendTokenForm,
   [Operation.LidoDeposit]: LidoDepositForm,
   [Operation.WrapEth]: WrapEthForm,
-  [Operation.AaveBorrow]: createAaveV3Form('Aave borrow'),
-  [Operation.AaveDeposit]: createAaveV3Form('Aave deposit'),
-  [Operation.AaveWithdraw]: createAaveV3Form('Aave withdraw'),
-  [Operation.AaveRepay]: createAaveV3Form('Aave repay'),
+  [Operation.AaveBorrow]: createAaveV3Form('Borrow'),
+  [Operation.AaveDeposit]: createAaveV3Form('Deposit'),
+  [Operation.AaveWithdraw]: createAaveV3Form('Withdraw'),
+  [Operation.AaveRepay]: createAaveV3Form('Repay'),
   [Operation.SwapTokens]: UniswapForm,
   [Operation.CreatePortfolio]: TriggerForm
 } as const;
