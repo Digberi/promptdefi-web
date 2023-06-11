@@ -21,7 +21,7 @@ export const preOpToBatchOp = (
     }
     targets.push(op.target);
     values.push(op.value ?? '0');
-    data.push(op.data);
+    data.push(op.data === 'null' ? '0x' : op.data);
   }
 
   return {

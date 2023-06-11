@@ -24,6 +24,16 @@ export class Erc20 {
   static readonly Interface = new Interface(erc20ABI);
 
   static createTransferPreOp({ tokenSymbol, amount, receiver }: Erc20.CreateSendPreOpParams): Array<PreOpStruct> {
+    if (tokenSymbol === 'ETH') {
+      return [
+        {
+          target: receiver,
+          value: toAtomic(amount, 18),
+          data: 'null'
+        }
+      ];
+    }
+
     const token = getTokenByTokenSymbol(tokenSymbol);
     const atomicAmount = toAtomic(amount, token.decimals).toString();
 
