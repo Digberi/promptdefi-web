@@ -29,7 +29,7 @@ export const useHomeViewModel = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          prompt: _message.replace('%', 'percent')
+          prompt: _message.replace('%', 'percents')
         })
       });
 
