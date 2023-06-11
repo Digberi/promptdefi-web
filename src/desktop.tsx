@@ -9,7 +9,8 @@ import { CFC } from './types/react';
 const Wrapper: CFC = styled(Box)({
   display: 'grid',
   gridTemplateRows: 'auto 1fr',
-  height: '100vh'
+  height: '100vh',
+  maxHight: '-webkit-fill-available'
 });
 
 const FullSizeContainer = styled(Container)(({ theme }) => ({

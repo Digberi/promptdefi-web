@@ -125,11 +125,11 @@ export class Uniswap {
     const tokenOut = getTokenByTokenSymbol(tokenSymbolOut);
 
     if (!tokenIn) {
-      throw new Error(`Token ${tokenSymbolIn} not found`);
+      throw new Error(`Token ${tokenSymbolIn} not found!`);
     }
 
     if (!tokenOut) {
-      throw new Error(`Token ${tokenSymbolOut} not found`);
+      throw new Error(`Token ${tokenSymbolOut} not found!`);
     }
 
     const atomicAmount = toAtomic(amount, tokenIn.decimals).toString();
