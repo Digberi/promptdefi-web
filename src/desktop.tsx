@@ -1,4 +1,5 @@
 import { Box, Container, Typography, styled } from '@mui/material';
+import Div100vh from 'react-div-100vh';
 
 import { Header } from './components/base/header';
 import { FeaturesInfo } from './components/base/info-panel/features-info';
@@ -57,39 +58,41 @@ const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
 
 export const Desktop = () => {
   return (
-    <Wrapper>
-      <Header />
-      <FullSizeContainer>
-        <DesktopPage title="Smart Account Details">
-          <AccountPage />
-        </DesktopPage>
+    <Div100vh>
+      <Wrapper>
+        <Header />
+        <FullSizeContainer>
+          <DesktopPage title="Smart Account Details">
+            <AccountPage />
+          </DesktopPage>
 
-        <DesktopPage title="Magic space">
-          <Box
-            id="home-page"
-            sx={{
-              bgcolor: 'background.default',
-              borderRadius: 2,
-              flexGrow: 1,
-              display: 'flex'
-            }}
-          >
-            <HomePage />
-          </Box>
-        </DesktopPage>
+          <DesktopPage title="Magic space">
+            <Box
+              id="home-page"
+              sx={{
+                bgcolor: 'background.default',
+                borderRadius: 2,
+                flexGrow: 1,
+                display: 'flex'
+              }}
+            >
+              <HomePage />
+            </Box>
+          </DesktopPage>
 
-        <DesktopPage title="Supported Operations">
-          <Box
-            sx={{
-              bgcolor: 'background.paper',
-              p: 2,
-              borderRadius: 2
-            }}
-          >
-            <FeaturesInfo />
-          </Box>
-        </DesktopPage>
-      </FullSizeContainer>
-    </Wrapper>
+          <DesktopPage title="Supported Operations">
+            <Box
+              sx={{
+                bgcolor: 'background.paper',
+                p: 2,
+                borderRadius: 2
+              }}
+            >
+              <FeaturesInfo />
+            </Box>
+          </DesktopPage>
+        </FullSizeContainer>
+      </Wrapper>
+    </Div100vh>
   );
 };
