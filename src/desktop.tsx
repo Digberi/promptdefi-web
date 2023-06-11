@@ -10,7 +10,7 @@ const Wrapper: CFC = styled(Box)({
   display: 'grid',
   gridTemplateRows: 'auto 1fr',
   height: '100vh',
-  maxHight: '-webkit-fill-available'
+  maxHight: 'fill-available'
 });
 
 const FullSizeContainer = styled(Container)(({ theme }) => ({
