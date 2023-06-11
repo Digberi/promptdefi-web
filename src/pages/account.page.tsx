@@ -20,6 +20,7 @@ import { Page } from '@/components/base/page';
 import { NetworkAvatar } from '@/components/ui/network-avatar';
 import { Token, tokens } from '@/config/tokens';
 import { useSmartAccount } from '@/hooks/use-smart-account';
+import { useSubscribeOnBlock } from '@/hooks/use-subscribe-on-block';
 import { CFC } from '@/types/react';
 import { copy } from '@/utils/copy';
 import { shrink } from '@/utils/shrink';
@@ -43,7 +44,7 @@ const GridList = styled(List)(({ theme }) => ({
 
 const Balance: FC<{ token: Token }> = ({ token }) => {
   const { smartAccountAddress } = useSmartAccount();
-  const provider = useProvider();
+  const { subscribe } = useSubscribeOnBlock();
 
   const { data: tokenInfo, refetch } = useBalance({
     address: smartAccountAddress,
@@ -51,12 +52,12 @@ const Balance: FC<{ token: Token }> = ({ token }) => {
   });
 
   useEffect(() => {
-    provider.on('block', async () => refetch());
+    const unsubscribe = subscribe(async () => {
+      refetch();
+    });
 
-    return () => {
-      provider.off('block');
-    };
-  }, [provider, refetch]);
+    return () => unsubscribe?.();
+  }, [refetch, subscribe]);
 
   return (
     <Tile
@@ -176,7 +177,6 @@ const WalletTile = () => {
     connector: Web3AuthConnector
   });
   const { disconnect } = useDisconnect();
-  console.log({ address });
 
   return (
     <Tile>

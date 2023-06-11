@@ -27,7 +27,12 @@ export const InfoPanel = () => {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >
-        <Box sx={{ width: '100vw' }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+        <Box
+          sx={{ width: '100vw', padding: 3 }}
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
+        >
           <FeaturesInfo />
         </Box>
       </SwipeableDrawer>

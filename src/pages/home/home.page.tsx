@@ -12,6 +12,7 @@ import { Hand } from '@/components/svg/hand';
 import { Template } from '@/components/ui/template';
 import { APP_NAME } from '@/config/constants';
 import { templates } from '@/config/templates';
+import { useIsDesktop } from '@/hooks/is-desktop';
 import { useOperations } from '@/providers/operations';
 
 const tabs = ['Request', 'Templates'];
@@ -20,8 +21,12 @@ const HomePlaceholder = () => {
   return (
     <Box sx={{ display: 'grid', placeItems: 'center', height: 'fit-content', alignSelf: 'center' }}>
       <Hand />
-      <Typography variant="h6">Hi! I am {APP_NAME}</Typography>
-      <Typography variant="body1">Just describe your request— and I'll do the magic.</Typography>
+      <Typography align="center" variant="h6">
+        Hi! I am {APP_NAME}
+      </Typography>
+      <Typography align="center" variant="body1">
+        Just describe your request— and I'll do the magic.
+      </Typography>
     </Box>
   );
 };
@@ -35,8 +40,7 @@ const HomePageLayout = styled(Page)(({ theme }) => ({
   gridTemplateColumns: '1fr',
 
   backgroundColor: theme.palette.background.default,
-  padding: theme.spacing(0, 0, 1.5),
-  borderRadius: theme.spacing(1)
+  padding: theme.spacing(0, 0, 1.5)
 }));
 
 export const HomePage = () => {
@@ -44,6 +48,7 @@ export const HomePage = () => {
   const { setOperations } = useOperations();
   const { setMainTab } = useTab();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { isDesktop } = useIsDesktop();
 
   const setTemplate = (message: string) => {
     setPromtMessage(message);
@@ -59,7 +64,11 @@ export const HomePage = () => {
   };
 
   return (
-    <HomePageLayout>
+    <HomePageLayout
+      sx={{
+        borderRadius: isDesktop ? 2 : 0
+      }}
+    >
       <Tabs tabs={tabs} />
       <TabPanel index={0}>
         <Box sx={{ display: 'grid', gap: 2, gridTemplateRows: '1fr auto', flex: 1 }}>

@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 
-import { useWebSocketProvider } from 'wagmi';
+import { useProvider } from 'wagmi';
 
 type Unsubscribe = () => void;
 type Callback = (blockNumber: number, unsubscribe: Unsubscribe) => void | Promise<void>;
 
-export function useSubscribeOnBlock(): { subscribe: (callback: Callback) => void };
-export function useSubscribeOnBlock(callback: Callback): { subscribe: () => void };
+export function useSubscribeOnBlock(): { subscribe: (callback: Callback) => Unsubscribe | void };
+export function useSubscribeOnBlock(callback: Callback): { subscribe: () => Unsubscribe | void };
 export function useSubscribeOnBlock(cb?: Callback) {
-  const provider = useWebSocketProvider();
+  const provider = useProvider();
   const callbackRef = useRef<Callback>();
 
   const Unsubscribe = () => {
@@ -40,8 +40,9 @@ export function useSubscribeOnBlock(cb?: Callback) {
     }
 
     callbackRef.current = async (level: number) => callback(level, Unsubscribe);
-
     provider.on('block', callbackRef.current);
+
+    return Unsubscribe;
   };
 
   return { subscribe };

@@ -75,8 +75,6 @@ export class Trigger {
     takeProfit,
     tokenSymbol
   }: Trigger.CreateTriggerPreOpParams): Promise<Array<PreOpStruct>> {
-    console.log({ amount, stopLoss, takeProfit, tokenSymbol });
-
     const token = getTokenByTokenSymbol(tokenSymbol);
 
     if (!token.triggerInfo) {

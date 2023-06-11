@@ -8,7 +8,7 @@ import { useAlert } from '@/providers/alert.provider';
 
 export const useHomeViewModel = () => {
   const { smartAccountAddress } = useSmartAccount();
-  const [promtMessage, setPromtMessage] = useState<string>('Swap 10 USDT to ETH');
+  const [promtMessage, setPromtMessage] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { callAlert } = useAlert();
 

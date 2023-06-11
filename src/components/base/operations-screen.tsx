@@ -5,6 +5,7 @@ import { Backdrop, Box, Button, ButtonGroup, IconButton, Typography, styled } fr
 
 import { FormsGenerator } from '../forms/forms.generator';
 
+import { useIsDesktop } from '@/hooks/is-desktop';
 import { useOperations } from '@/providers/operations';
 
 interface OperationScreenProps {
@@ -54,7 +55,7 @@ const CustomBackdropFooter = styled(ButtonGroup)(({ theme }) => ({
 
 export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen }) => {
   const { operations, updateOperation, sendOperations, setOperations } = useOperations();
-
+  const { isDesktop } = useIsDesktop();
   const handleCancel = () => {
     setOperations([]);
     setIsOpen(false);
@@ -79,7 +80,12 @@ export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen })
         <FormsGenerator listOperations={operations} setOperation={updateOperation} />
       </CustomBackdropContent>
 
-      <CustomBackdropFooter fullWidth>
+      <CustomBackdropFooter
+        fullWidth
+        sx={{
+          borderRadius: isDesktop ? 2 : 0
+        }}
+      >
         <Button onClick={handleCancel}>Cancel</Button>
         <Button variant="contained" onClick={handleSendOperations}>
           Execute

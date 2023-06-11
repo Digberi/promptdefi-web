@@ -115,10 +115,6 @@ export class AAveV3 {
       data: depositData
     };
 
-    console.log({
-      tokenAddress
-    });
-
     return approvePreOp.concat(depositPreOp);
   }
 

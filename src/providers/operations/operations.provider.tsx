@@ -55,8 +55,7 @@ export const OperationsProvider: CFC = ({ children }) => {
       unsubscribe();
 
       const etherscanLink = `${ETHERSCAN_TX_URL}/${transaction.hash}`;
-      const { data: receipt, isOk } = await awaiter(transaction.wait(1));
-
+      const { data: receipt, isOk } = await awaiter(transaction.wait(0));
       if (!isOk) {
         callAlert(`Transaction failed:`, etherscanLink, 0);
 
