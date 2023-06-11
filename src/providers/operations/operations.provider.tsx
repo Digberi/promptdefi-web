@@ -43,7 +43,9 @@ export const OperationsProvider: CFC = ({ children }) => {
 
     const batchPreOp = await createBatchPreOp(operations);
 
-    await sendBatch(batchPreOp);
+    await sendBatch(batchPreOp, {
+      gasLimit: 1_000_000
+    });
 
     subscribe(async (level, unsubscribe) => {
       const { transactions } = await provider.getBlockWithTransactions(level);

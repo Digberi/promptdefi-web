@@ -42,6 +42,8 @@ const GridList = styled(List)(({ theme }) => ({
   gap: theme.spacing(1)
 }));
 
+const subs: Record<string, boolean> = {};
+
 const Balance: FC<{ token: Token }> = ({ token }) => {
   const { smartAccountAddress } = useSmartAccount();
   const { subscribe } = useSubscribeOnBlock();
@@ -52,12 +54,18 @@ const Balance: FC<{ token: Token }> = ({ token }) => {
   });
 
   useEffect(() => {
-    const unsubscribe = subscribe(async () => {
+    if (subs[token.address ?? '0']) {
+      return;
+    }
+
+    subs[token.address ?? '0'] = true;
+
+    subscribe(() => {
       refetch();
     });
 
-    return () => unsubscribe?.();
-  }, [refetch, subscribe]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Tile

@@ -59,28 +59,28 @@ export const tokens: Array<Token> = [
     decimals: 18,
     symbol: 'LINK',
     name: 'Chainlink'
-  },
-  {
-    address: '0xBC33cfbD55EA6e5B97C6da26F11160ae82216E2b',
-    logoURI: 'https://etherscan.io/token/images/statiseuro_28.png',
-    decimals: 2,
-    symbol: 'EURS',
-    name: 'STASIS EURS Token'
-  },
-  {
-    address: '0x8153A21dFeB1F67024aA6C6e611432900FF3dcb9',
-    logoURI: 'https://etherscan.io/token/images/aave_32.png',
-    decimals: 18,
-    symbol: 'AAVE',
-    name: 'Aave Token'
-  },
-  {
-    name: 'DAI Stablecoin',
-    symbol: 'DAI',
-    decimals: 18,
-    logoURI: 'https://etherscan.io/token/images/MCDDai_32.png',
-    address: '0xBa8DCeD3512925e52FE67b1b5329187589072A55'
   }
+  // {
+  //   address: '0xBC33cfbD55EA6e5B97C6da26F11160ae82216E2b',
+  //   logoURI: 'https://etherscan.io/token/images/statiseuro_28.png',
+  //   decimals: 2,
+  //   symbol: 'EURS',
+  //   name: 'STASIS EURS Token'
+  // },
+  // {
+  //   address: '0x8153A21dFeB1F67024aA6C6e611432900FF3dcb9',
+  //   logoURI: 'https://etherscan.io/token/images/aave_32.png',
+  //   decimals: 18,
+  //   symbol: 'AAVE',
+  //   name: 'Aave Token'
+  // },
+  // {
+  //   name: 'DAI Stablecoin',
+  //   symbol: 'DAI',
+  //   decimals: 18,
+  //   logoURI: 'https://etherscan.io/token/images/MCDDai_32.png',
+  //   address: '0xBa8DCeD3512925e52FE67b1b5329187589072A55'
+  // }
 ];
 
 // export const aaveTokens: Array<Token> = [
