@@ -83,20 +83,22 @@ export const SendTokenForm: FC<SendTokenFormProps> = ({ data, setData }) => {
         <FormControl disabled={!isEditing} fullWidth>
           <InputLabel id="send-token-select-token-label">Select token</InputLabel>
           <Select value={innerData.tokenSymbol} label="Select token" onChange={handleTokenChange}>
-            {tokens.map((_token, index) => (
-              <MenuItem key={index} value={_token.symbol}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1
-                  }}
-                >
-                  <Avatar src={_token.logoURI} alt={_token.symbol} />
-                  <Typography variant="body1">{_token.symbol}</Typography>
-                </Box>
-              </MenuItem>
-            ))}
+            {tokens
+              .filter(_token => _token.symbol !== 'ETH')
+              .map((_token, index) => (
+                <MenuItem key={index} value={_token.symbol}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1
+                    }}
+                  >
+                    <Avatar src={_token.logoURI} alt={_token.symbol} />
+                    <Typography variant="body1">{_token.symbol}</Typography>
+                  </Box>
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
 
