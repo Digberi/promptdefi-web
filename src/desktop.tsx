@@ -7,21 +7,16 @@ import { AccountPage } from './pages/account.page';
 import { HomePage } from './pages/home/home.page';
 import { CFC } from './types/react';
 
-const Wrapper: CFC = styled(Box)({
+const Wrapper: CFC = styled(Box)(({ theme }) => ({
   display: 'grid',
-  gridTemplateRows: 'auto 1fr',
-  height: '100vh',
-  maxHight: 'fill-available',
-  overflow: 'hidden'
-});
+  gridTemplateRows: `${theme.shape.headerHeight} calc(100vh - ${theme.shape.headerHeight})`
+}));
 
 const FullSizeContainer = styled(Container)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '1fr 2fr 1fr',
   gap: theme.spacing(2),
-  paddingTop: theme.spacing(3),
-  maxHeight: `calc(100vh - ${theme.shape.headerHeight})`,
-  overflow: 'hidden'
+  paddingTop: theme.spacing(3)
 }));
 
 const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
@@ -32,7 +27,7 @@ const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
         display: 'flex',
         flexDirection: 'column',
         mb: 2,
-        overflow: 'hidden'
+        overflowY: 'scroll'
       }}
     >
       <Typography
