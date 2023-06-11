@@ -50,7 +50,7 @@ export const MicroSpeechRecognition: FC<MicroSpeechRecognitionProps> = ({ onReco
           <Mic color="primary">mic</Mic>
         </IconButton>
       ) : (
-        <Tooltip title="Voice input is not supported on your browser">
+        <Tooltip title={!isSupported ? 'Voice input is not supported on your browser' : ''}>
           <IconButton disabled={!isSupported} onClick={startSpeechRecognition}>
             <Mic>mic_off</Mic>
           </IconButton>
