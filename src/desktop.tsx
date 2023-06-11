@@ -11,7 +11,8 @@ const Wrapper: CFC = styled(Box)({
   display: 'grid',
   gridTemplateRows: 'auto 1fr',
   height: '100vh',
-  maxHight: 'fill-available'
+  maxHight: 'fill-available',
+  overflow: 'hidden'
 });
 
 const FullSizeContainer = styled(Container)(({ theme }) => ({
@@ -19,7 +20,8 @@ const FullSizeContainer = styled(Container)(({ theme }) => ({
   gridTemplateColumns: '1fr 2fr 1fr',
   gap: theme.spacing(2),
   paddingTop: theme.spacing(3),
-  maxHeight: `calc(100vh - ${theme.shape.headerHeight})`
+  maxHeight: `calc(100vh - ${theme.shape.headerHeight})`,
+  overflow: 'hidden'
 }));
 
 const DesktopPage: CFC<{ title: string }> = ({ title, children }) => {
