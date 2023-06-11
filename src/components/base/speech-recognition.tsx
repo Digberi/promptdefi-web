@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 
 import { Mic } from '@mui/icons-material';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 
 import { SpeechRecognitionCustomResult, useSpeechRecognition } from '@/hooks/use-speech-recognition';
 
@@ -50,9 +50,11 @@ export const MicroSpeechRecognition: FC<MicroSpeechRecognitionProps> = ({ onReco
           <Mic color="primary">mic</Mic>
         </IconButton>
       ) : (
-        <IconButton disabled={!isSupported} onClick={startSpeechRecognition}>
-          <Mic>mic_off</Mic>
-        </IconButton>
+        <Tooltip title="Voice input is not supported on your browser">
+          <IconButton disabled={!isSupported} onClick={startSpeechRecognition}>
+            <Mic>mic_off</Mic>
+          </IconButton>
+        </Tooltip>
       )}
     </Box>
   );

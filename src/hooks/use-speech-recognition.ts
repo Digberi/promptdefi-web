@@ -34,11 +34,14 @@ export const useSpeechRecognition = (options?: SpeechRecognitionOptions) => {
   const recognition = useRef<SpeechRecognition | null>(null);
 
   const startSpeechRecognition = () => {
-    const speechRecognitionList = new webkitSpeechGrammarList();
-    speechRecognitionList.addFromString(grammar, 10);
-    speechRecognitionList.addFromString(tokenSymbolsGrammar, 100);
     recognition.current = new webkitSpeechRecognition();
-    recognition.current.grammars = speechRecognitionList;
+
+    if (isSpeechRecognitionListSupported) {
+      const speechRecognitionList = new webkitSpeechGrammarList();
+      speechRecognitionList.addFromString(grammar, 10);
+      speechRecognitionList.addFromString(tokenSymbolsGrammar, 100);
+      recognition.current.grammars = speechRecognitionList;
+    }
     recognition.current.continuous = false;
     recognition.current.interimResults = false;
     recognition.current.lang = options?.lang || 'en-US';
@@ -73,7 +76,7 @@ export const useSpeechRecognition = (options?: SpeechRecognitionOptions) => {
       setIsListening(false);
     }
   };
-  const isSupported = isSpeechRecognitionSupported && isSpeechRecognitionListSupported;
+  const isSupported = isSpeechRecognitionSupported;
 
   return { isListening, result, isSupported, startSpeechRecognition, stopSpeechRecognition };
 };
