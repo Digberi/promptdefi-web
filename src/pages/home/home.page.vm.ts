@@ -29,7 +29,7 @@ export const useHomeViewModel = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          prompt: _message.replace('%', 'percent').replace('BTC', 'WBTC')
+          prompt: _message.replace('%', 'percent')
         })
       });
 
