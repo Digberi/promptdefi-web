@@ -70,7 +70,7 @@ export const AlertProvider: CFC = ({ children }) => {
           elevation={6}
           onClose={handleClose}
           severity={content?.type}
-          sx={{ minWidth: 400, width: '100%', alignItems: 'center' }}
+          sx={{ minWidth: 300, width: '100%', alignItems: 'center' }}
         >
           <div>{content?.message}</div>
           {content?.href && (

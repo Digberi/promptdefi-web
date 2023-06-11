@@ -13,7 +13,7 @@ import {
   Typography,
   styled
 } from '@mui/material';
-import { goerli, useAccount, useBalance, useConnect, useDisconnect, useProvider } from 'wagmi';
+import { goerli, useAccount, useBalance, useConnect, useDisconnect } from 'wagmi';
 
 import { Web3AuthConnector } from '@/auth/wagmi';
 import { Page } from '@/components/base/page';
