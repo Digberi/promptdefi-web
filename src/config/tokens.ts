@@ -8,6 +8,9 @@ export interface Token {
     priceFeed: string;
     poolFee: number;
   };
+  faucet?: {
+    amount: string;
+  };
 }
 
 export const tokens: Array<Token> = [
@@ -44,14 +47,20 @@ export const tokens: Array<Token> = [
     logoURI: 'https://etherscan.io/token/images/tethernew_32.png',
     decimals: 6,
     symbol: 'USDT',
-    name: 'Tether USD'
+    name: 'Tether USD',
+    faucet: {
+      amount: '1000'
+    }
   },
   {
     address: '0x65aFADD39029741B3b8f0756952C74678c9cEC93',
     logoURI: 'https://etherscan.io/token/images/centre-usdc_28.png',
     decimals: 6,
     symbol: 'USDC',
-    name: 'USD Coin'
+    name: 'USD Coin',
+    faucet: {
+      amount: '1000'
+    }
   },
   {
     address: '0x326C977E6efc84E512bB9C30f76E30c160eD06FB',

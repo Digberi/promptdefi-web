@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Box, Typography, styled } from '@mui/material';
+import { Backdrop, Box, CircularProgress, Typography, styled } from '@mui/material';
 
 import { useHomeViewModel } from './home.page.vm';
 
@@ -43,8 +43,14 @@ const HomePageLayout = styled(Page)(({ theme }) => ({
   padding: theme.spacing(0, 0, 1.5)
 }));
 
+const LoaderScreen = styled(Backdrop)(({ theme }) => ({
+  position: 'absolute',
+  borderRadius: theme.spacing(1),
+  zIndex: theme.zIndex.drawer + 1
+}));
+
 export const HomePage = () => {
-  const { sendPromt, promtMessage, setPromtMessage } = useHomeViewModel();
+  const { sendPromt, promtMessage, setPromtMessage, isSubmitting } = useHomeViewModel();
   const { setOperations } = useOperations();
   const { setMainTab } = useTab();
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -90,6 +96,9 @@ export const HomePage = () => {
       </TabPanel>
 
       <OperationScreen isOpen={isOpen} setIsOpen={setIsOpen} />
+      <LoaderScreen open={isSubmitting}>
+        <CircularProgress color="success" />
+      </LoaderScreen>
     </HomePageLayout>
   );
 };

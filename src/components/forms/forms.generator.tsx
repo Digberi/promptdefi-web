@@ -48,9 +48,10 @@ export const FormsGenerator: FC<FormGeneratorProps> = ({ listOperations, setOper
             data
           });
         };
+        const uniqueKey = `${JSON.stringify(operation)}-${index}`;
 
         //@ts-ignore
-        return <Form key={index} data={operation.data} setData={setData} />;
+        return <Form key={uniqueKey} data={operation.data} setData={setData} />;
       })}
     </Box>
   );

@@ -30,13 +30,14 @@ export function useSubscribeOnBlock(cb?: Callback) {
     if (call && cb) {
       throw new Error('Cannot pass callback to useSubscribeOnBlock twice');
     }
-    if (callbackRef.current) {
-      throw new Error('Already subscribed to block events');
-    }
 
     const callback = call || cb;
     if (!callback) {
       throw new Error('Must pass callback to useSubscribeOnBlock');
+    }
+
+    if (callbackRef.current) {
+      return;
     }
 
     callbackRef.current = async (level: number) => callback(level, Unsubscribe);

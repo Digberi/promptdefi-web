@@ -17,6 +17,7 @@ import { goerli, useAccount, useBalance, useConnect, useDisconnect } from 'wagmi
 
 import { Web3AuthConnector } from '@/auth/wagmi';
 import { Page } from '@/components/base/page';
+import { FaucetButton } from '@/components/ui/faucet-button';
 import { NetworkAvatar } from '@/components/ui/network-avatar';
 import { Token, tokens } from '@/config/tokens';
 import { useSmartAccount } from '@/hooks/use-smart-account';
@@ -34,7 +35,8 @@ const SubHeader = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontWeight: theme.typography.fontWeightBold,
   fontSize: theme.typography.pxToRem(14),
-  padding: theme.spacing(1)
+  padding: theme.spacing(1),
+  paddingBottom: theme.spacing(0.5)
 }));
 
 const GridList = styled(List)(({ theme }) => ({
@@ -257,6 +259,9 @@ export const AccountPage = () => {
 
       {isReady && (
         <>
+          <SubHeader>Faucet</SubHeader>
+          <FaucetButton />
+
           <SubHeader>Balances</SubHeader>
           <GridList>
             {tokens.map(token => (

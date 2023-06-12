@@ -69,7 +69,7 @@ export const OperationScreen: FC<OperationScreenProps> = ({ isOpen, setIsOpen })
   return (
     <CustomBackdrop open={isOpen}>
       <CustomBackdropHeader>
-        <IconButton onClick={() => setIsOpen(false)}>
+        <IconButton onClick={handleCancel}>
           <ArrowBack />
         </IconButton>
         <Typography variant="body1">Request result</Typography>
