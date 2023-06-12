@@ -42,9 +42,9 @@ export const FaucetButton = () => {
       }}
     >
       <Link href={LINK_FAUCET_URL} target="_blank">
-        <FButton>Faucet Link</FButton>
+        <FButton>Get Link token</FButton>
       </Link>
-      <FButton onClick={faucet}>{loading ? <CircularProgress /> : 'Faucet stablecoins'}</FButton>
+      <FButton onClick={faucet}>{loading ? <CircularProgress /> : 'Get stablecoins'}</FButton>
     </Box>
   );
 };
